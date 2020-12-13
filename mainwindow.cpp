@@ -1,15 +1,214 @@
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
+#include "ui_mainwindow.h"
+#include <QCoreApplication>
+#include "pieceHorse.h"
+#include "pieceTower.h"
+#include "pieceAlfil.h"
+#include "pieceQueen.h"
+#include "pieceKing.h"
+#include "piecePawn.h"
+
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    /*QPalette pal = ui->p11->palette();
+    pal.setColor(QPalette::Button, QColor(Qt::blue));
+    ui->p11->setAutoFillBackground(true);
+    ui->p11->setPalette(pal);
+    ui->p11->update();*/
+
+   /* QLayoutItem* item=ui->tablero->itemAtPosition(4,4);
+    QWidget* widget = item->widget();
+    QPushButton* button = dynamic_cast<QPushButton*>(widget);
+     button->setIcon(QIcon("C:/Users/pc/Desktop/UNIVERSIDAD/8vo semestre/TO/Proyecto/ChessGame/iconos/tower-b.png"));
+*/
+
+    //tanto para las piezas como para el jugados se coloca  1 y 2
+    //1: para el blanco
+    //2: para el negro
+
+    initButtons(0,0,new Tower(2));
+    initButtons(0,1,new Horse(2));
+    initButtons(0,2,new Alfil(2));
+    initButtons(0,3,new King(2));
+    initButtons(0,4,new Queen(2));
+    initButtons(0,5,new Alfil(2));
+    initButtons(0,6,new Horse(2));
+    initButtons(0,7,new Tower(2));
+
+    initButtons(1,0,new Pawn(2));
+    initButtons(1,1,new Pawn(2));
+    initButtons(1,2,new Pawn(2));
+    initButtons(1,3,new Pawn(2));
+    initButtons(1,4,new Pawn(2));
+    initButtons(1,5,new Pawn(2));
+    initButtons(1,6,new Pawn(2));
+    initButtons(1,7,new Pawn(2));
+
+    initButtons(7,0,(new Tower(1)));
+    initButtons(7,1,(new Horse(1)));
+    initButtons(7,2,(new Alfil(1)));
+    initButtons(7,3,(new King(1)));
+    initButtons(7,4,(new Queen(1)));
+    initButtons(7,5,(new Alfil(1)));
+    initButtons(7,6,(new Horse(1)));
+    initButtons(7,7,(new Tower(1)));
+
+    initButtons(6,0,(new Pawn(1)));
+    initButtons(6,1,(new Pawn(1)));
+    initButtons(6,2,(new Pawn(1)));
+    initButtons(6,3,(new Pawn(1)));
+    initButtons(6,4,(new Pawn(1)));
+    initButtons(6,5,(new Pawn(1)));
+    initButtons(6,6,(new Pawn(1)));
+    initButtons(6,7,(new Pawn(1)));
+
+    initButtons(2,0,nullptr);
+    initButtons(2,1,nullptr);
+    initButtons(2,2,nullptr);
+    initButtons(2,3,nullptr);
+    initButtons(2,4,nullptr);
+    initButtons(2,5,nullptr);
+    initButtons(2,6,nullptr);
+    initButtons(2,7,nullptr);
+
+    initButtons(3,0,nullptr);
+    initButtons(3,1,nullptr);
+    initButtons(3,2,nullptr);
+    initButtons(3,3,nullptr);
+    initButtons(3,4,nullptr);
+    initButtons(3,5,nullptr);
+    initButtons(3,6,nullptr);
+    initButtons(3,7,nullptr);
+
+    initButtons(4,0,nullptr);
+    initButtons(4,1,nullptr);
+    initButtons(4,2,nullptr);
+    initButtons(4,3,nullptr);
+    initButtons(4,4,nullptr);
+    initButtons(4,5,nullptr);
+    initButtons(4,6,nullptr);
+    initButtons(4,7,nullptr);
+
+    initButtons(5,0,nullptr);
+    initButtons(5,1,nullptr);
+    initButtons(5,2,nullptr);
+    initButtons(5,3,nullptr);
+    initButtons(5,4,nullptr);
+    initButtons(5,5,nullptr);
+    initButtons(5,6,nullptr);
+    initButtons(5,7,nullptr);
+
+    white=new Player(1);//inicia al jugador con clave 1 es decir jugador de ficha blanca
+    black=new Player(2);//inicia al jugador con clave 2 jugador con ficha negra
+    this->setPlayerTurn(white);
+
+    //form save game UI
+    formSaveGame= new FileUIManagerSave;
+    QObject::connect(ui->saveGamebutton,SIGNAL(clicked()),formSaveGame,SLOT(show()));
+
+
+}
+
+//-----------------------inicia los botones y los coloca en el tablero
+void MainWindow::initButtons(int16_t x,int16_t y,Piece* newpiece)
+{
+
+
+    Lockerc *botonnuevo= new Lockerc(this);//Iniciamos el objeto Casillero(Lockerc)
+    botonnuevo->setMainWindow(this);//le pasamos un vínculo con la vista principal
+    if(newpiece!=nullptr){//si existe una pieza a agregar a este casillero creado entonces la agrega
+        std::string ruta="C:/Users/pc/Desktop/UNIVERSIDAD/8vo semestre/TO/Proyecto/ChessGame/iconos/"+newpiece->getImagen();
+        botonnuevo->setIcon(QIcon(ruta.c_str()));//colocamos el ícono de la pieza
+        botonnuevo->setPiece(newpiece);//agregamos el puntero pieza al casillero
+    }
+    botonnuevo->setPosition(x,y);
+
+    connect(botonnuevo, SIGNAL (clicked()),botonnuevo, SLOT (handleButton()));/*add event on push*/
+    casilleros.push_back(botonnuevo);//agregamos el boton al vector de puntero boton para tener siempre la referencia a estos
+    botonnuevo->setMaximumWidth(65);//agregamos las dimensiones del boton
+    botonnuevo->setMaximumHeight(65);//
+    botonnuevo->setMinimumWidth(65);
+    botonnuevo->setMinimumHeight(65);
+    botonnuevo->setIconSize(QSize(65,65));//agrega el tamaño al icono de este boton
+    ui->tablero->addWidget(botonnuevo,x,y);//agrega el boton al tablero
+}
+
+//cambiar el turno de los jugadores
+void MainWindow::changeTurn(){this->playerturn=(playerturn==white)?black:white;}
+Player* MainWindow::getPlayerTurn(){return playerturn;}
+void MainWindow::setPlayerTurn(Player* turnplayer){playerturn=turnplayer;}
+void MainWindow::setPushed(Lockerc * p){pushed=p;}//incresa un puntero del boton precionad
+Lockerc* MainWindow::getPushed(){return pushed;}//retorna el puntero al boton precionado
+bool MainWindow:: isPushed(){return (pushed!=nullptr)?true:false;}//saber si hay algun boton precionado
+
+//-------------------------------------------------------------------------------------------
+//----------------------------Función que controla la dinámica del juego--------------------
+//-------------------------------------------------------------------------------------------
+void MainWindow::playControl(Lockerc* bpushed)
+{
+    //si en la tabla ya hay un botón presionado
+    if(this->isPushed()){
+        if(bpushed->getPiece()!=nullptr){
+            if(pushed->getPiece()->getType()==bpushed->getPiece()->getType()){//si es que se ha decidido escoger otra pieza para mover
+               //aqui podría haber otra condición para el enrroque
+               bpushed->setStroke();//cambia el color de la nueva pieza a resaltado
+               pushed->removeStroke();//quita el resaltado de la anterior pieza
+               this->setPushed(bpushed);//indica al tablero cual es el nuevo presionado
+            }else{//aqui el control en caso de que quiera matar a alguien
+                //verificar lo necesario
+                //si es que está en jaque
+                //si es que cumple con el tipo de movimiento de la pieza
+                //si coronó como reina
+                //etc...
+            }
+        }else{//en caso contrario
+            //aqui irían todo lo necesario para controlar el movimiento
+            //si es que está en jaque
+            //si es que cumple con el tipo de movimiento de la pieza
+            //si coronó como reina
+            //etc...
+
+            //por el momento solo estoy colocando el movimiento
+            //como si no hubiese reglas pero aqui tú las debes establecer
+            //para controlar el movimiento, agrega los métodos que creas conveniente
+
+
+            //al lugar de movimiento se le agrega la pieza que se quería mover
+            bpushed->setPiece(this->getPushed()->getPiece());
+            //repinta el casillero(Lockerc) para que se muestre la nueva pieza que lo debe ocupar
+            bpushed->rePaint();
+
+            //se limpia el puntero del casillero presionada, ya que ya se ejecutó el movimiento y este ya no tiene pieza
+            this->getPushed()->setPiece(nullptr);
+            //se repinta el casillero y como ya se movió no debería haber nada
+            this->getPushed()->rePaint();
+            pushed->removeStroke();//quita el resaltado de la anterior pieza
+            //al la tabla le indicamos que ya no hay ningun presionado, pues se ejecutó el movimiento
+            this->setPushed(nullptr);
+            this->changeTurn();//cambia el turno cuando ya se hizo la jugada
+
+        }
+
+    }
+    else{//aqui entra si se presiona el boton que se quiere mover
+      if(bpushed->getPiece()!=nullptr){//tiene que tener una pieza, sino que se movería
+          if(bpushed->getPiece()->getType()==this->getPlayerTurn()->getColor()){//verifica que la pieza que se quiere mover sea del color del jugador
+                    this->setPushed(bpushed);//le indico a la tabla que este boton está presionado mas no movido
+                    pushed->setStroke();//resalta el casillero
+          }
+      }
+   }
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+
 

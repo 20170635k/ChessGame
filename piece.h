@@ -4,22 +4,28 @@
 #include <stdint.h>
 #include <string>
 #include <vector>
-#include "Position.h"
+#include "position.h"
+#include <iostream>
 
 class Piece{
 public:
+
+    Piece();
+    virtual ~Piece();
     static uint16_t TYPE_WHITE;
     static uint16_t TYPE_BLACK;
-    virtual bool move(unsigned char x, uint16_t y)=0;
-    virtual bool kill()=0;
-    virtual void setImagen(std::string imagen)=0;
-    virtual std::string getImagen()=0;
-    virtual void setType(uint16_t type)=0;
-    virtual uint16_t getType()=0;
+
+    //si no escuentras utilidad al método move o kill lo borras y agregas tus métodos
+    virtual bool move(unsigned char x, uint16_t y){return true;};//aun no se definio el uso
+    virtual bool kill(){return true;};// aun no se definió el uso
+    virtual void setImagen(std::string imagen){this->imagen=imagen;};
+    virtual std::string getImagen(){return imagen;};
+    virtual void setType(uint16_t type){this->type=type;};
+    virtual uint16_t getType(){return 0;};
 protected:
-    std::vector<Position> possiblemoves;
-    std::string imagen;
-    uint16_t type;
+    std::vector<Position> possiblemoves;// para guardar los posibles movimientos de una pieza aun no está implementado
+    std::string imagen;//guarda imagen de la pieza
+    uint16_t type;//guarda el tipo ya sea blanco o negro
 };
 
 #endif // PIECE_H
