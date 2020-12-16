@@ -111,6 +111,15 @@ MainWindow::MainWindow(QWidget *parent)
     formSaveGame= new FileUIManagerSave;
     QObject::connect(ui->saveGamebutton,SIGNAL(clicked()),formSaveGame,SLOT(show()));
 
+    QGridLayout* qhb = ui->viewpiecekilledblack;
+    QGridLayout* qhw = ui->viewpiecekilledwhite;
+    killedViewManager=new ManagerViewPieceKilled(qhw,qhb);
+
+    chronowhite= new Chronometer();
+    chronoblack= new Chronometer();
+    ui->chronoblack->addWidget(chronoblack);
+    ui->chronowhite->addWidget(chronowhite);
+
 
 }
 
@@ -139,7 +148,19 @@ void MainWindow::initButtons(int16_t x,int16_t y,Piece* newpiece)
 }
 
 //cambiar el turno de los jugadores
-void MainWindow::changeTurn(){this->playerturn=(playerturn==white)?black:white;}
+void MainWindow::changeTurn(){
+    if(playerturn==white){
+        this->playerturn=black;
+        chronowhite->pause();
+        chronoblack->resume();
+
+    }else{
+        this->playerturn=white;
+        chronoblack->pause();
+        chronowhite->resume();
+    }
+
+}
 Player* MainWindow::getPlayerTurn(){return playerturn;}
 void MainWindow::setPlayerTurn(Player* turnplayer){playerturn=turnplayer;}
 void MainWindow::setPushed(Lockerc * p){pushed=p;}//incresa un puntero del boton precionad
@@ -151,7 +172,11 @@ bool MainWindow:: isPushed(){return (pushed!=nullptr)?true:false;}//saber si hay
 //-------------------------------------------------------------------------------------------
 void MainWindow::playControl(Lockerc* bpushed)
 {
+
+
     //si en la tabla ya hay un botón presionado
+    //killedViewManager->addPieceKilled(bpushed->getPiece());
+
     if(this->isPushed()){
         if(bpushed->getPiece()!=nullptr){
             if(pushed->getPiece()->getType()==bpushed->getPiece()->getType()){//si es que se ha decidido escoger otra pieza para mover
@@ -196,12 +221,13 @@ void MainWindow::playControl(Lockerc* bpushed)
 
     }
     else{//aqui entra si se presiona el boton que se quiere mover
-      if(bpushed->getPiece()!=nullptr){//tiene que tener una pieza, sino que se movería
+        if(bpushed->getPiece()!=nullptr){//tiene que tener una pieza, sino que se movería
           if(bpushed->getPiece()->getType()==this->getPlayerTurn()->getColor()){//verifica que la pieza que se quiere mover sea del color del jugador
                     this->setPushed(bpushed);//le indico a la tabla que este boton está presionado mas no movido
                     pushed->setStroke();//resalta el casillero
           }
       }
+
    }
 }
 

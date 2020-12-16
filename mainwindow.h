@@ -6,6 +6,9 @@
 #include "piece.h"
 #include "player.h"
 #include "fileuimanagersave.h"
+#include <QHBoxLayout>
+#include "managerviewpiecekilled.h"
+#include "chronometer.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -35,6 +38,10 @@ private:
     Player* black;
     Player* playerturn{nullptr};
     FileUIManagerSave* formSaveGame;//--nuevo
+    ManagerViewPieceKilled *killedViewManager;
+    Chronometer* chronowhite;
+    Chronometer* chronoblack;
+
 
 };
 #endif // MAINWINDOW_H

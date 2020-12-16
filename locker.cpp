@@ -17,8 +17,6 @@ Piece* Lockerc::getPiece(){return this->piece;}
 void Lockerc::setMainWindow(MainWindow *mw){contenedor=mw;}
 
 void Lockerc::handleButton(){
-
-    this->getPiece()->move('x',5);
     contenedor->playControl(this);}//cuanodo se preciona el boton(casillero) se llama al controlador del juego
 void Lockerc:: setStroke()//le da un borde azul al contorno del boton
 {

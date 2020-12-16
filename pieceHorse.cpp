@@ -6,7 +6,6 @@ Horse::Horse(uint16_t type):
     setImagen((type==this->TYPE_BLACK)?"horse-b.png":"horse-w.png");
 }
 bool Horse::move(unsigned char x, uint16_t y){
-    std::cout<<this->getImagen().c_str()<<std::endl;
     return true;
 }
 bool Horse::kill() {

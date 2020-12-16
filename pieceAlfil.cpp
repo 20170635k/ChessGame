@@ -6,8 +6,6 @@ Alfil::Alfil(uint16_t type):
     setImagen((type==this->TYPE_BLACK)?"alfil-b.png":"alfil-w.png");
 }
 bool Alfil::move(unsigned char x, uint16_t y){
-
-    std::cout<<this->getImagen().c_str()<<std::endl;
     return true;
 }
 bool Alfil::kill() {
