@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>iconos/alfil-b.png</file>
+        <file>iconos/alfil-w.png</file>
+        <file>iconos/horse-b.png</file>
+        <file>iconos/horse-w.png</file>
+        <file>iconos/king-b.png</file>
+        <file>iconos/king-w.png</file>
+        <file>iconos/pawn-b.png</file>
+        <file>iconos/pawn-w.png</file>
+        <file>iconos/queen-b.png</file>
+        <file>iconos/queen-w.png</file>
+        <file>iconos/tower-b.png</file>
+        <file>iconos/tower-w.png</file>
+    </qresource>
+    <qresource prefix="/logGames">
+        <file>logGame/miprimerjuego.txt</file>
+        <file>logGame/nosemanito.txt</file>
+        <file>logGame/nuevoarchivo.txt</file>
+    </qresource>
+</RCC>

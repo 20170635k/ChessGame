@@ -22,9 +22,11 @@ FileUIManagerSave::FileUIManagerSave(QWidget *parent):
 }
 
 void FileUIManagerSave:: saveGameData(){
+
     QString nameGame=nameFile->toPlainText();
-    QString fname="C:\\Users\\pc\\Desktop\\UNIVERSIDAD\\8vo semestre\\TO\\Proyecto\\ChessGame-copy\\games\\"+nameGame+".txt";
-    QFile file(fname);
+    std::cout<<"name: "<<QCoreApplication::applicationDirPath().toStdString()<<std::endl;
+    QString path=QCoreApplication::applicationDirPath()+"/"+nameGame +".txt";
+    QFile file(path);
     if(file.open(QIODevice::WriteOnly|QIODevice::Text)){
         QTextStream stream(&file);
         vectorMovemetsToStream(movements,stream);

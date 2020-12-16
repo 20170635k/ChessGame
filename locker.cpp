@@ -37,7 +37,7 @@ void Lockerc:: removeStroke()//le quita el borde azul
 //actualizar la imagen de la ficha en el tablero
 void Lockerc::rePaint(){
     if(this->piece!=nullptr){
-        std::string ruta="C:/Users/pc/Desktop/UNIVERSIDAD/8vo semestre/TO/Proyecto/ChessGame/iconos/"+this->piece->getImagen();
+        std::string ruta=":/images/iconos/"+this->piece->getImagen();
         this->setIcon(QIcon(ruta.c_str()));
     }else{
         this->setIcon(QIcon(""));

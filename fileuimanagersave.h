@@ -5,8 +5,10 @@
 #include <QPushButton>
 #include <QTextEdit>
 #include <QHBoxLayout>
+#include <QCoreApplication>
 #include "filemovementpiecemanager.h"
 #include "movementpiece.h"
+
 class FileUIManagerSave:public QDialog
 {
     Q_OBJECT

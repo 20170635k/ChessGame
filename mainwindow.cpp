@@ -131,7 +131,7 @@ void MainWindow::initButtons(int16_t x,int16_t y,Piece* newpiece)
     Lockerc *botonnuevo= new Lockerc(this);//Iniciamos el objeto Casillero(Lockerc)
     botonnuevo->setMainWindow(this);//le pasamos un vínculo con la vista principal
     if(newpiece!=nullptr){//si existe una pieza a agregar a este casillero creado entonces la agrega
-        std::string ruta="C:/Users/pc/Desktop/UNIVERSIDAD/8vo semestre/TO/Proyecto/ChessGame/iconos/"+newpiece->getImagen();
+        std::string ruta=":/images/iconos/"+newpiece->getImagen();
         botonnuevo->setIcon(QIcon(ruta.c_str()));//colocamos el ícono de la pieza
         botonnuevo->setPiece(newpiece);//agregamos el puntero pieza al casillero
     }

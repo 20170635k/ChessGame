@@ -13,7 +13,7 @@ void ManagerViewPieceKilled:: addPieceKilled(Piece *killed){
     pieceKilled->setMinimumWidth(20);
     pieceKilled->setMinimumHeight(20);
     pieceKilled->setIconSize(QSize(20,20));//agrega el tamaño al icono de este boton
-    pieceKilled->setIcon(QIcon(("C:/Users/pc/Desktop/UNIVERSIDAD/8vo semestre/TO/Proyecto/ChessGame/iconos/"+killed->getImagen()).c_str()));
+    pieceKilled->setIcon(QIcon((":/images/iconos/"+killed->getImagen()).c_str()));
     if(killed->getType()==killed->TYPE_BLACK){
         blackBoxPieces->addWidget(pieceKilled,this->sizeblack/8,this->sizeblack%8);
         blackPieces.push_back(killed);
