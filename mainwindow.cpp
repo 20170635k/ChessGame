@@ -117,7 +117,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     chronowhite= new Chronometer();
     chronoblack= new Chronometer();
-    ui->chronoblack->addWidget(chronoblack);
+    ui->chronoblack_3->addWidget(chronoblack);
     ui->chronowhite->addWidget(chronowhite);
 
 

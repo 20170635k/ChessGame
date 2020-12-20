@@ -29,7 +29,7 @@ void Lockerc:: setStroke()//le da un borde azul al contorno del boton
 void Lockerc:: removeStroke()//le quita el borde azul
 {
     QPalette pal = this->palette();
-    pal.setColor(QPalette::Button, QColor(Qt::white));
+    pal.setColor(QPalette::Button, QColor(94,60,0));
     this->setAutoFillBackground(true);
     this->setPalette(pal);
     this->update();
