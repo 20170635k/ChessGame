@@ -29,6 +29,13 @@ public:
     void setPlayerTurn(Player* turnplayer);
     void changeTurn();
     void playControl(Lockerc* bpushed);
+    void habilitarMov(Lockerc*pushed);
+    void deshabilitarMov(Lockerc*pushed);
+    void removerPieza(Lockerc*pushed);
+    bool jake(Piece*jake);
+
+    Piece* reyNegro;
+    Piece * reyBlanco;
 private:
     Ui::MainWindow *ui;
     //posición presionada

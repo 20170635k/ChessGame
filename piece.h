@@ -8,8 +8,8 @@
 #include <iostream>
 
 class Piece{
-public:
 
+public:
     Piece();
     virtual ~Piece();
     static uint16_t TYPE_WHITE;
@@ -22,10 +22,18 @@ public:
     virtual std::string getImagen(){return imagen;};
     virtual void setType(uint16_t type){this->type=type;};
     virtual uint16_t getType(){return 0;};
+
+    virtual void setPosition(uint16_t x, uint16_t y);
+    virtual Position* getPosition();
+
+    virtual bool movLargo(){return true;};
+    virtual std::vector<std::vector<int>> posible();
+    bool firstMove=true;
 protected:
-    std::vector<Position> possiblemoves;// para guardar los posibles movimientos de una pieza aun no está implementado
+    Position*position;// para guardar los posibles movimientos de una pieza aun no está implementado
     std::string imagen;//guarda imagen de la pieza
     uint16_t type;//guarda el tipo ya sea blanco o negro
+
 };
 
 #endif // PIECE_H
