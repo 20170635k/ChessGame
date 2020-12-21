@@ -257,13 +257,13 @@ void MainWindow::playControl(Lockerc* bpushed)
                 //al la tabla le indicamos que ya no hay ningun presionado, pues se ejecutó el movimiento
                 this->setPushed(nullptr);
 
-                if(reyBlanco->getType()!=bpushed->getPiece()->getType()){
+                if(bpushed->getPiece()->getType()==2){
                     if(jake(reyBlanco)){
-                        std::cout<<"JAKE NEGROO "<<std::endl;
+                        std::cout<<"JAKE BLANCOOO "<<std::endl;
                     }
                 }else{
                     if(jake(reyNegro)){
-                        std::cout<<"JAKE BLANCOOOO"<<std::endl;
+                        std::cout<<"JAKE NEGROOOOO"<<std::endl;
                     }
                 }
 
