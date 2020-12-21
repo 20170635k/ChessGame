@@ -12,6 +12,8 @@
         <file>iconos/queen-w.png</file>
         <file>iconos/tower-b.png</file>
         <file>iconos/tower-w.png</file>
+        <file>iconos/chess-menu-fondo.png</file>
+        <file>iconos/logo.png</file>
     </qresource>
     <qresource prefix="/logGames">
         <file>logGame/miprimerjuego.txt</file>

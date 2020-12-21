@@ -11,7 +11,6 @@
 class Chronometer : public QWidget {
     Q_OBJECT
     QTime startTime;
-    QTime auxTimeGone;
     QTimer t;
     QLabel * l;
 
@@ -19,11 +18,10 @@ private:
     uint32_t countTime{0};
     uint32_t shotTime{0};
     bool playing{false};
-//    QPushButton * startB, * stopB;
-  public:
+public:
     Chronometer(QWidget *parent=nullptr);
     static uint32_t DURATION_TIME;
-  public slots:
+public slots:
     void updateTime() {
         shotTime=startTime.elapsed();
         std::cout<<countTime<<std::endl;

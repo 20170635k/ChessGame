@@ -7,14 +7,15 @@
 #include "pieceQueen.h"
 #include "pieceKing.h"
 #include "piecePawn.h"
-
-
-
+#include <QScreen>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //center window
+    move(QGuiApplication::screens().at(0)->geometry().center() - frameGeometry().center());
+    setWindowTitle(QString("Chess Game TO"));
     /*QPalette pal = ui->p11->palette();
     pal.setColor(QPalette::Button, QColor(Qt::blue));
     ui->p11->setAutoFillBackground(true);
@@ -31,43 +32,47 @@ MainWindow::MainWindow(QWidget *parent)
     //1: para el blanco
     //2: para el negro
 
-    initButtons(0,0,new Tower(2));
-    initButtons(0,1,new Horse(2));
-    initButtons(0,2,new Alfil(2));
+    this->setFixedSize(952,680);
+    Piece *piece=nullptr;
+
+    initButtons(0,0,new Tower(piece->TYPE_BLACK));
+    initButtons(0,1,new Horse(piece->TYPE_BLACK));
+    initButtons(0,2,new Alfil(piece->TYPE_BLACK));
     reyNegro=new King(2);
     initButtons(0,3,reyNegro);
-    initButtons(0,4,new Queen(2));
-    initButtons(0,5,new Alfil(2));
-    initButtons(0,6,new Horse(2));
-    initButtons(0,7,new Tower(2));
+    initButtons(0,4,new Queen(piece->TYPE_BLACK));
+    initButtons(0,5,new Alfil(piece->TYPE_BLACK));
+    initButtons(0,6,new Horse(piece->TYPE_BLACK));
+    initButtons(0,7,new Tower(piece->TYPE_BLACK));
 
-    initButtons(1,0,new Pawn(2));
-    initButtons(1,1,new Pawn(2));
-    initButtons(1,2,new Pawn(2));
-    initButtons(1,3,new Pawn(2));
-    initButtons(1,4,new Pawn(2));
-    initButtons(1,5,new Pawn(2));
-    initButtons(1,6,new Pawn(2));
-    initButtons(1,7,new Pawn(2));
+    initButtons(1,0,new Pawn(piece->TYPE_BLACK));
+    initButtons(1,1,new Pawn(piece->TYPE_BLACK));
+    initButtons(1,2,new Pawn(piece->TYPE_BLACK));
+    initButtons(1,3,new Pawn(piece->TYPE_BLACK));
+    initButtons(1,4,new Pawn(piece->TYPE_BLACK));
+    initButtons(1,5,new Pawn(piece->TYPE_BLACK));
+    initButtons(1,6,new Pawn(piece->TYPE_BLACK));
+    initButtons(1,7,new Pawn(piece->TYPE_BLACK));
 
-    initButtons(7,0,(new Tower(1)));
-    initButtons(7,1,(new Horse(1)));
-    initButtons(7,2,(new Alfil(1)));
+    initButtons(7,0,(new Tower(piece->TYPE_WHITE)));
+    initButtons(7,1,(new Horse(piece->TYPE_WHITE)));
+    initButtons(7,2,(new Alfil(piece->TYPE_WHITE)));
     reyBlanco=new King(1);
     initButtons(7,3,reyBlanco);
-    initButtons(7,4,(new Queen(1)));
-    initButtons(7,5,(new Alfil(1)));
-    initButtons(7,6,(new Horse(1)));
-    initButtons(7,7,(new Tower(1)));
+    initButtons(7,4,(new Queen(piece->TYPE_WHITE)));
+    initButtons(7,5,(new Alfil(piece->TYPE_WHITE)));
+    initButtons(7,6,(new Horse(piece->TYPE_WHITE)));
+    initButtons(7,7,(new Tower(piece->TYPE_WHITE)));
 
-    initButtons(6,0,(new Pawn(1)));
-    initButtons(6,1,(new Pawn(1)));
-    initButtons(6,2,(new Pawn(1)));
-    initButtons(6,3,(new Pawn(1)));
-    initButtons(6,4,(new Pawn(1)));
-    initButtons(6,5,(new Pawn(1)));
-    initButtons(6,6,(new Pawn(1)));
-    initButtons(6,7,(new Pawn(1)));
+    initButtons(6,0,(new Pawn(piece->TYPE_WHITE)));
+    initButtons(6,1,(new Pawn(piece->TYPE_WHITE)));
+    initButtons(6,2,(new Pawn(piece->TYPE_WHITE)));
+    initButtons(6,3,(new Pawn(piece->TYPE_WHITE)));
+    initButtons(6,4,(new Pawn(piece->TYPE_WHITE)));
+    initButtons(6,5,(new Pawn(piece->TYPE_WHITE)));
+    initButtons(6,6,(new Pawn(piece->TYPE_WHITE)));
+    initButtons(6,7,(new Pawn(piece->TYPE_WHITE)));
+
 
     initButtons(2,0,nullptr);
     initButtons(2,1,nullptr);
@@ -112,14 +117,16 @@ MainWindow::MainWindow(QWidget *parent)
     black=new Player(2);//inicia al jugador con clave 2 jugador con ficha negra
     this->setPlayerTurn(white);
 
-    //form save game UI
-    formSaveGame= new FileUIManagerSave;
-    QObject::connect(ui->saveGamebutton,SIGNAL(clicked()),formSaveGame,SLOT(show()));
+
 
     QGridLayout* qhb = ui->viewpiecekilledblack;
     QGridLayout* qhw = ui->viewpiecekilledwhite;
     killedViewManager=new ManagerViewPieceKilled(qhw,qhb);
 
+    notificationManager=new NotificationManager();
+
+    notificationManager->showNotification(notificationManager->NOTIFICATION_START_GAME);
+    ui->Notification->addWidget(notificationManager);
     chronowhite= new Chronometer();
     chronoblack= new Chronometer();
     ui->chronoblack_3->addWidget(chronoblack);
@@ -158,11 +165,12 @@ void MainWindow::changeTurn(){
         this->playerturn=black;
         chronowhite->pause();
         chronoblack->resume();
-
+        notificationManager->showNotification(notificationManager->NOTIFICATION_BLACK_TIME);
     }else{
         this->playerturn=white;
         chronoblack->pause();
         chronowhite->resume();
+        notificationManager->showNotification(notificationManager->NOTIFICATION_WHITE_TIME);
     }
 
 }
@@ -180,7 +188,8 @@ void MainWindow::playControl(Lockerc* bpushed)
 
 
     //si en la tabla ya hay un botón presionado
-    //killedViewManager->addPieceKilled(bpushed->getPiece());
+    if(bpushed->getPiece()!=nullptr)
+        killedViewManager->addPieceKilled(bpushed->getPiece());
 
     if(this->isPushed()){
         if(bpushed->getPiece()!=nullptr){
