@@ -36,6 +36,6 @@ void FileUIManagerSave:: saveGameData(){
 void FileUIManagerSave:: vectorMovemetsToStream(std::vector<MovementPiece*> movements, QTextStream &stream){
 
     for(auto c:movements){
-        stream<<c->formatString()<<endl;
+        stream<<c->formatString()<<"\n";
     }
 }

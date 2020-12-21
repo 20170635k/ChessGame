@@ -5,7 +5,7 @@
 #include "locker.h"
 #include "piece.h"
 #include "player.h"
-#include "fileuimanagersave.h"
+#include "notificationmanager.h"
 #include <QHBoxLayout>
 #include "managerviewpiecekilled.h"
 #include "chronometer.h"
@@ -37,7 +37,7 @@ private:
     Player* white;
     Player* black;
     Player* playerturn{nullptr};
-    FileUIManagerSave* formSaveGame;//--nuevo
+    NotificationManager* notificationManager;
     ManagerViewPieceKilled *killedViewManager;
     Chronometer* chronowhite;
     Chronometer* chronoblack;

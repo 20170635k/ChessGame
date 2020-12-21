@@ -7,7 +7,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -54,6 +53,9 @@ else()
     pieceTower.cpp
     player.cpp
     position.cpp
+    menugame.cpp
+    notificationmanager.cpp
+    notification.cpp
     mainwindow.h
     chronometer.h
     filemovementpiecemanager.h
@@ -71,6 +73,9 @@ else()
     pieceTower.h
     player.h
     position.h
+    menugame.h
+    notification.h
+    notificationmanager.h
     mainwindow.ui
     resources.qrc
   )
