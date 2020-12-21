@@ -16,6 +16,8 @@ public:
     std::string getImagen()override;
     void setType(uint16_t type)override ;
     uint16_t getType()override;
+    std::vector<std::vector<int>>posible()override;
+    bool movLargo()override;
 };
 
 #endif // KING_H

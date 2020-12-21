@@ -22,10 +22,14 @@ public:
 
     void rePaint(std::string msg);
     void rePaint();
+    void pintarCamino();
+    void despintarCamino();
     void setStroke();
     void removeStroke();
     void setPosition(uint16_t x, uint16_t y);
     Position* getPosition();
+    bool getHabilitado();
+    void setHabilitado(bool);
 
 public slots:
     void handleButton();
@@ -33,6 +37,7 @@ private:
     Piece* piece{nullptr};
     MainWindow *contenedor;
     Position* pos;
+    bool habilitado=false;
 
 };
 #endif // LOCKER_H
