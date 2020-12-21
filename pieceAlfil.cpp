@@ -4,6 +4,7 @@ Alfil::Alfil(uint16_t type):
     type{type}
 {
     setImagen((type==this->TYPE_BLACK)?"alfil-b.png":"alfil-w.png");
+    this->nombre="alfil";
 }
 bool Alfil::move(unsigned char x, uint16_t y){
     return true;
@@ -20,3 +21,5 @@ std::vector<std::vector<int>> Alfil ::posible(){
     std::vector<std::vector<int>> vec={{1,1},{-1,1},{1,-1},{-1,-1}};
     return vec;
 }
+
+

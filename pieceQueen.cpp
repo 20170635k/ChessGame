@@ -4,6 +4,7 @@ Queen::Queen(uint16_t type):
     type{type}
 {
     setImagen((type==this->TYPE_BLACK)?"queen-b.png":"queen-w.png");
+    this->nombre="queen";
 }
 bool Queen::move(unsigned char x, uint16_t y){
     return true;

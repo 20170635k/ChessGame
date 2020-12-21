@@ -4,6 +4,7 @@ Tower::Tower(uint16_t type):
     type{type}
 {
     setImagen((type==this->TYPE_BLACK)?"tower-b.png":"tower-w.png");
+    this->nombre="tower";
 }
 bool Tower::move(unsigned char x, uint16_t y){
     return true;
