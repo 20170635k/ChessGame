@@ -9,7 +9,7 @@ private:
     uint16_t type;
     Position * position;
 public:
-    Alfil(uint16_t type);
+    explicit Alfil(uint16_t type);
     bool move(unsigned char x, uint16_t y) override;
     bool kill()override ;
     void setImagen(std::string imagen)override;

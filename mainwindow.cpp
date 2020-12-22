@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QCoreApplication>
+#include "menugame.h"
 #include "pieceHorse.h"
 #include "pieceTower.h"
 #include "pieceAlfil.h"
@@ -8,7 +9,8 @@
 #include "pieceKing.h"
 #include "piecePawn.h"
 #include <QScreen>
-MainWindow::MainWindow(QWidget *parent)
+#include <QTableWidgetItem>
+MainWindow::MainWindow(QApplication &a, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -110,6 +112,75 @@ MainWindow::MainWindow(QWidget *parent)
     initButtons(5,6,nullptr);
     initButtons(5,7,nullptr);
     std::cout<<"prueba :'v";
+
+
+    movementManager=new FileUIManagerSave(ui->Log);
+    MenuGame* m=new MenuGame(a,movementManager);
+    m->show();
+
+
+     MovementPiece*movement=nullptr;
+             movement=new MovementPiece(
+                *(reyNegro->getPosition()),
+                *(reyBlanco->getPosition()),
+                reyBlanco,
+                movement->MOVEMENT_JAKE_MATE
+                );
+    MovementPiece* movement1=new MovementPiece(
+                *(reyNegro->getPosition()),
+                *(reyBlanco->getPosition()),
+                reyNegro,
+                movement->MOVEMENT_CAPTURE
+                );
+   MovementPiece* movement2=new MovementPiece(
+                *(reyNegro->getPosition()),
+                *(reyBlanco->getPosition()),
+                reyBlanco,
+                movement->MOVEMENT_SINGLE
+                );
+    MovementPiece* movement3=new MovementPiece(
+                *(reyNegro->getPosition()),
+                *(reyBlanco->getPosition()),
+                reyNegro,
+                movement->MOVEMENT_JAKE
+                );
+   MovementPiece* movement4=new MovementPiece(
+                *(reyNegro->getPosition()),
+                *(reyBlanco->getPosition()),
+                reyBlanco,
+                movement->MOVEMENT_SHORT_CASTLING
+                );
+   MovementPiece* movement5=new MovementPiece(
+               *(reyNegro->getPosition()),
+               *(reyBlanco->getPosition()),
+               reyNegro,
+               movement->MOVEMENT_LARGE_CASTLING
+               );
+   MovementPiece* movement6=new MovementPiece(
+               *(reyNegro->getPosition()),
+               *(reyBlanco->getPosition()),
+               reyNegro,
+               movement->MOVEMENT_LARGE_CASTLING,
+               movement->MOVEMENT_JAKE
+               );
+   MovementPiece* movement7=new MovementPiece(
+               *(reyNegro->getPosition()),
+               *(reyBlanco->getPosition()),
+               reyNegro,
+               movement->MOVEMENT_LARGE_CASTLING,
+               movement->MOVEMENT_JAKE_MATE
+               );
+
+
+
+    movementManager->addMovement(movement);
+    movementManager->addMovement(movement1);
+    movementManager->addMovement(movement2);
+    movementManager->addMovement(movement3);
+    movementManager->addMovement(movement4);
+    movementManager->addMovement(movement5);
+    movementManager->addMovement(movement6);
+    movementManager->addMovement(movement7);
 
     std::cout<<reyBlanco->getPosition()->getPosX()<<std::endl;
 

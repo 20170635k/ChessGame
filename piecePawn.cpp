@@ -1,7 +1,7 @@
 #include "piecePawn.h"
 
 Pawn::Pawn(uint16_t type):
-    type{type}
+    Piece(PIECE_CODE_PAWN),type{type}
 {
     setImagen((type==this->TYPE_BLACK)?"pawn-b.png":"pawn-w.png");
 }

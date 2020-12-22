@@ -1,7 +1,7 @@
 #include "pieceTower.h"
 
 Tower::Tower(uint16_t type):
-    type{type}
+    Piece(PIECE_CODE_TOWER),type{type}
 {
     setImagen((type==this->TYPE_BLACK)?"tower-b.png":"tower-w.png");
 }

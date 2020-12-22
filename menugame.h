@@ -6,13 +6,13 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QPushButton>
-#include "fileuimanagersave.h"
 #include <QApplication>
+#include "fileuimanagersave.h"
 class MenuGame : public QDialog
 {
     Q_OBJECT
 public:
-    explicit MenuGame(QApplication &a,QWidget *parent=0);
+    explicit MenuGame(QApplication &a,FileUIManagerSave* saveManager,QWidget *parent=0);
     virtual ~MenuGame() {}
 private:
     QVBoxLayout *layoutContainer;

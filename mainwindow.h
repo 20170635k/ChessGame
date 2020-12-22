@@ -6,6 +6,7 @@
 #include "piece.h"
 #include "player.h"
 #include "notificationmanager.h"
+#include "fileuimanagersave.h"
 #include <QHBoxLayout>
 #include "managerviewpiecekilled.h"
 #include "chronometer.h"
@@ -19,7 +20,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QApplication&a, QWidget *parent = nullptr);
     ~MainWindow();
     void initButtons(int16_t x,int16_t y,Piece* newpiece);
     void setPushed(Lockerc*);
@@ -48,7 +49,7 @@ private:
     ManagerViewPieceKilled *killedViewManager;
     Chronometer* chronowhite;
     Chronometer* chronoblack;
-
+    FileUIManagerSave * movementManager;
 
 };
 #endif // MAINWINDOW_H

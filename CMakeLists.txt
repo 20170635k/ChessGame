@@ -39,7 +39,6 @@ else()
     mainwindow.cpp
     chronometer.cpp
     filemovementpiecemanager.cpp
-    fileuimanageropen.cpp
     fileuimanagersave.cpp
     locker.cpp
     managerviewpiecekilled.cpp
@@ -59,7 +58,6 @@ else()
     mainwindow.h
     chronometer.h
     filemovementpiecemanager.h
-    fileuimanageropen.h
     fileuimanagersave.h
     locker.h
     managerviewpiecekilled.h

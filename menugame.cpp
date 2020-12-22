@@ -1,7 +1,6 @@
 #include "menugame.h"
-#include "mainwindow.h"
-MenuGame::MenuGame(QApplication &a,QWidget *parent):
-    QDialog(parent)
+MenuGame::MenuGame(QApplication &a,FileUIManagerSave* saveManager,QWidget *parent):
+    QDialog(parent),formSaveGame{saveManager}
 {
 
     setWindowTitle(QString("Menu Chess"));
@@ -42,15 +41,10 @@ MenuGame::MenuGame(QApplication &a,QWidget *parent):
     layoutContainer->setAlignment(Qt::AlignCenter);
     setLayout(layoutContainer);
 
-
-    //form save game UI
-    formSaveGame= new FileUIManagerSave;
-
+    //SIGNAL guardar movimientos realizados
     QObject::connect(saveLogGame,SIGNAL(clicked()),formSaveGame,SLOT(show()));
 
-    MainWindow *w= new MainWindow();
     QObject::connect(startGame,SIGNAL(clicked()),this,SLOT(hide()));
-    QObject::connect(startGame,SIGNAL(clicked()),w,SLOT(show()));
 
     QObject::connect(exit, SIGNAL(clicked()), &a, SLOT(closeAllWindows()));
 

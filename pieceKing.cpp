@@ -1,7 +1,7 @@
 #include "pieceKing.h"
 
 King::King(uint16_t type):
-    type{type}
+    Piece(PIECE_CODE_KING),type{type}
 {
     setImagen((type==this->TYPE_BLACK)?"king-b.png":"king-w.png");
 }

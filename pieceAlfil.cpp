@@ -1,7 +1,7 @@
 #include "pieceAlfil.h"
 #include <iostream>
 Alfil::Alfil(uint16_t type):
-    type{type}
+    Piece(PIECE_CODE_ALFIL),type{type}
 {
     setImagen((type==this->TYPE_BLACK)?"alfil-b.png":"alfil-w.png");
 }
