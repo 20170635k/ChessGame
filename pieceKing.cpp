@@ -4,6 +4,7 @@ King::King(uint16_t type):
     Piece(PIECE_CODE_KING),type{type}
 {
     setImagen((type==this->TYPE_BLACK)?"king-b.png":"king-w.png");
+    this->nombre="king";
 }
 bool King::move(unsigned char x, uint16_t y){
     return true;

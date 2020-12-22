@@ -4,6 +4,7 @@ Pawn::Pawn(uint16_t type):
     Piece(PIECE_CODE_PAWN),type{type}
 {
     setImagen((type==this->TYPE_BLACK)?"pawn-b.png":"pawn-w.png");
+    this->nombre="pawn";
 }
 bool Pawn::move(unsigned char x, uint16_t y){
     return true;

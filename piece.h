@@ -35,9 +35,8 @@ public:
     virtual bool movLargo(){return true;};
     virtual std::vector<std::vector<int>> posible();
     bool firstMove=true;
-
     virtual std::string getPieceCode();
-
+    std::string nombre;
 protected:
     Position*position;// para guardar los posibles movimientos de una pieza aun no está implementado
     std::string imagen;//guarda imagen de la pieza
