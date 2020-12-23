@@ -98,8 +98,8 @@ void MainWindow::changeTurn(){
     }
 }
 void MainWindow:: endGame(){
-    chronoblack->stop();
-    chronowhite->stop();
+    chronoblack->pause();
+    chronowhite->pause();
     enJuego=false;
 }
 void MainWindow:: startNewGame(){
@@ -227,8 +227,8 @@ void MainWindow::playControl(Lockerc* bpushed)
                     MovementPiece* movement1;
                     if(bpushed->getPiece()->nombre=="king"){
                         movement1=new MovementPiece(
-                                    *(pushed->getPiece()->getPosition()),
-                                    *(bpushed->getPiece()->getPosition()),
+                                    *(pushed->getPosition()),
+                                    *(bpushed->getPosition()),
                                     pushed->getPiece(),
                                     movement1->MOVEMENT_JAKE_MATE
                                     );
@@ -237,8 +237,8 @@ void MainWindow::playControl(Lockerc* bpushed)
                     }else{
                         //MovementPiece* movement1;
                         movement1=new MovementPiece(
-                                    *(pushed->getPiece()->getPosition()),
-                                    *(bpushed->getPiece()->getPosition()),
+                                    *(pushed->getPosition()),
+                                    *(bpushed->getPosition()),
                                     pushed->getPiece(),
                                     movement1->MOVEMENT_CAPTURE
                                     );
@@ -259,8 +259,8 @@ void MainWindow::playControl(Lockerc* bpushed)
                     this->setPushed(nullptr);
                     jake(bpushed,movement1);
                     movementManager->addMovement(movement1);
-
-                    this->changeTurn();//cambia el turno cuando ya se hizo la jugada
+                    if(enJuego)
+                        this->changeTurn();//cambia el turno cuando ya se hizo la jugada
                 }
             }
         }else{//movimiento simple
@@ -274,8 +274,8 @@ void MainWindow::playControl(Lockerc* bpushed)
                 //repinta el casillero(Lockerc) para que se muestre la nueva pieza que lo debe ocupar
 
                 MovementPiece* movement2=new MovementPiece(
-                            *(pushed->getPiece()->getPosition()),
-                            *(bpushed->getPiece()->getPosition()),
+                            *(pushed->getPosition()),
+                            *(bpushed->getPosition()),
                             pushed->getPiece(),
                             movement2->MOVEMENT_SINGLE
                             );
@@ -410,9 +410,11 @@ void MainWindow:: jakeMate(Lockerc*bpushed,MovementPiece* movement1){
     if(bpushed->getPiece()->getType()==2){
         notificationManagerSpecial->showNotification(notificationManager->NOTIFICATION_JAKE_MATE_BLACK);
      movement1->plusMovement(movement1->MOVEMENT_JAKE_MATE);
+     endGame();
     }else if(bpushed->getPiece()->getType()==1){
         notificationManagerSpecial->showNotification(notificationManager->NOTIFICATION_JAKE_MATE_WHITE);
      movement1->plusMovement(movement1->MOVEMENT_JAKE_MATE);
+     endGame();
     }
 }
 

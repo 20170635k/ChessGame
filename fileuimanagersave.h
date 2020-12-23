@@ -10,6 +10,7 @@
 #include "movementpiece.h"
 #include <QTableWidget>
 #include <QHeaderView>
+#include <QLabel>
 class FileUIManagerSave:public QDialog
 {
     Q_OBJECT

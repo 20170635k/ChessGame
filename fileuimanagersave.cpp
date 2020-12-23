@@ -9,12 +9,14 @@ FileUIManagerSave::FileUIManagerSave(QTableWidget* table,QWidget *parent):
     tableWidget->setRowCount(0);
     tableWidget->setColumnWidth(0,200);
     tableWidget->horizontalHeader()->hide();
-
-    setWindowTitle("Save file Manager");
-    saveButton= new QPushButton();
+    QLabel *label= new QLabel("Nombre de Juego");
+    setWindowTitle("Guardar Juego");
+    saveButton= new QPushButton("guardar");
     nameFile= new QTextEdit();
     layoutContainer= new QHBoxLayout();
-
+    nameFile->setMaximumHeight(30);
+    nameFile->setMinimumHeight(30);
+    layoutContainer->addWidget(label);
     layoutContainer->addWidget(nameFile);
     layoutContainer->addWidget(saveButton);
     setLayout(layoutContainer);
