@@ -17,6 +17,7 @@ Piece* Lockerc::getPiece(){return this->piece;}
 void Lockerc::setMainWindow(MainWindow *mw){contenedor=mw;}
 
 void Lockerc::handleButton(){
+    std::cout<<contenedor->enJuego<<std::endl;
     if(contenedor->enJuego){
         contenedor->playControl(this);
     }

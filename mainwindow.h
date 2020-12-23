@@ -35,6 +35,8 @@ public:
     void deshabilitarMov(Lockerc*pushed);
     void removerPieza(Lockerc*pushed);
     bool jake(Piece*jake);
+    void endGame();
+    void startNewGame();
 
     Piece* reyNegro;
     Piece * reyBlanco;
@@ -44,6 +46,8 @@ public:
     Player* white;
     Player* black;
     bool enJuego{false};
+    FileUIManagerSave * movementManager;
+    void startPieces();
 private:
     Ui::MainWindow *ui;
     //posición presionada
@@ -54,7 +58,10 @@ private:
     NotificationManager* notificationManagerSpecial;
     ManagerViewPieceKilled *killedViewManager;
 
-    FileUIManagerSave * movementManager;
+
 
 };
+
+
+
 #endif // MAINWINDOW_H

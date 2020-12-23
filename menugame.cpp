@@ -56,8 +56,7 @@ MenuGame::MenuGame(MainWindow* mainwindow, QApplication &a,FileUIManagerSave* sa
 void MenuGame:: startGameSlot(){
     this->hide();
     mainwindow->show();
-    mainwindow->setPlayerTurn(mainwindow->white);
+    mainwindow->startNewGame();
     mainwindow->notificationManager->showNotification(mainwindow->notificationManager->NOTIFICATION_START_GAME);
-    mainwindow->chronowhite->resume();
-    mainwindow->enJuego=true;
+
 }
