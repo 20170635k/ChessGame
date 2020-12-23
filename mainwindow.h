@@ -32,9 +32,9 @@ public:
     void changeTurn();
     void playControl(Lockerc* bpushed);
     void habilitarMov(Lockerc*pushed);
-    void deshabilitarMov(Lockerc*pushed);
+    void deshabilitarMov();
     void removerPieza(Lockerc*pushed);
-    void jake(Lockerc*pushed);
+    void jake(Lockerc*pushed,MovementPiece*mov);
     bool searchJake(Piece*jake);
 
     Piece* reyNegro;
