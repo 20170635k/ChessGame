@@ -1,7 +1,7 @@
 #include "pieceQueen.h"
 
 Queen::Queen(uint16_t type):
-    type{type}
+    Piece(PIECE_CODE_QUEEN),type{type}
 {
     setImagen((type==this->TYPE_BLACK)?"queen-b.png":"queen-w.png");
     this->nombre="queen";

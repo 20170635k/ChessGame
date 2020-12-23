@@ -6,9 +6,11 @@
 #include "piece.h"
 #include "player.h"
 #include "notificationmanager.h"
+#include "fileuimanagersave.h"
 #include <QHBoxLayout>
 #include "managerviewpiecekilled.h"
 #include "chronometer.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -19,7 +21,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QApplication&a, QWidget *parent = nullptr);
     ~MainWindow();
     void initButtons(int16_t x,int16_t y,Piece* newpiece);
     void setPushed(Lockerc*);
@@ -37,19 +39,23 @@ public:
 
     Piece* reyNegro;
     Piece * reyBlanco;
+    NotificationManager* notificationManager;
+    Chronometer* chronowhite;
+    Chronometer* chronoblack;
+    Player* white;
+    Player* black;
+    bool enJuego{false};
 private:
     Ui::MainWindow *ui;
     //posición presionada
     Lockerc *pushed{nullptr};
     std::vector<Lockerc*> casilleros;
-    Player* white;
-    Player* black;
     Player* playerturn{nullptr};
-    NotificationManager* notificationManager;
-    ManagerViewPieceKilled *killedViewManager;
-    Chronometer* chronowhite;
-    Chronometer* chronoblack;
 
+    NotificationManager* notificationManagerSpecial;
+    ManagerViewPieceKilled *killedViewManager;
+
+    FileUIManagerSave * movementManager;
 
 };
 #endif // MAINWINDOW_H

@@ -1,7 +1,7 @@
 #include "pieceHorse.h"
 
 Horse::Horse(uint16_t type):
-    type{type}
+    Piece(PIECE_CODE_HORSE),type{type}
 {
     setImagen((type==this->TYPE_BLACK)?"horse-b.png":"horse-w.png");
     this->nombre="horse";

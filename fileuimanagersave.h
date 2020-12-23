@@ -8,12 +8,14 @@
 #include <QCoreApplication>
 #include "filemovementpiecemanager.h"
 #include "movementpiece.h"
-
+#include <QTableWidget>
+#include <QHeaderView>
 class FileUIManagerSave:public QDialog
 {
     Q_OBJECT
 public:
-    explicit FileUIManagerSave(QWidget *parent=0);
+    explicit FileUIManagerSave(QTableWidget* table,QWidget *parent=0);
+    void addMovement(MovementPiece* movement);
     void vectorMovemetsToStream(std::vector<MovementPiece*> movements, QTextStream &stream);
 private:
     FileMovementPieceManager *dataToSave;
@@ -21,6 +23,7 @@ private:
     QTextEdit * nameFile;
     QHBoxLayout * layoutContainer;
     std::vector<MovementPiece*> movements;
+    QTableWidget* tableWidget;
 private slots:
     void saveGameData();
 

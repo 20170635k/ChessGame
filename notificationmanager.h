@@ -39,14 +39,14 @@ public:
     static uint16_t NOTIFICATION_JAKE_MATE_BLACK;
     static uint16_t NOTIFICATION_WHITE_TIME;
     static uint16_t NOTIFICATION_BLACK_TIME;
-    static uint16_t NOTIFICATION_GAME_OVER;
     static uint16_t NOTIFICATION_WHITE_WIN;
     static uint16_t NOTIFICATION_BLACK_WIN;
 
 public slots:
     void updateTime() {
+
         if(notifications.size()>0){
-            if(startTime.elapsed()>=notifications[notifications.size()-1].getDuration()*1000){
+            if(startTime.elapsed()+200>=notifications[notifications.size()-1].getDuration()*1000){
                 notifications.pop_back();
                 stop();
                 if(notifications.size()>0){
