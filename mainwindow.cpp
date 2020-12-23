@@ -119,8 +119,8 @@ void MainWindow::startPieces(){
     initButtons(0,1,new Horse(piece->TYPE_BLACK));
     initButtons(0,2,new Alfil(piece->TYPE_BLACK));
     reyNegro=new King(piece->TYPE_BLACK);
-    initButtons(0,3,reyNegro);
-    initButtons(0,4,new Queen(piece->TYPE_BLACK));
+    initButtons(0,4,reyNegro);
+    initButtons(0,3,new Queen(piece->TYPE_BLACK));
     initButtons(0,5,new Alfil(piece->TYPE_BLACK));
     initButtons(0,6,new Horse(piece->TYPE_BLACK));
     initButtons(0,7,new Tower(piece->TYPE_BLACK));
@@ -138,8 +138,8 @@ void MainWindow::startPieces(){
     initButtons(7,1,(new Horse(piece->TYPE_WHITE)));
     initButtons(7,2,(new Alfil(piece->TYPE_WHITE)));
     reyBlanco=new King(piece->TYPE_WHITE);
-    initButtons(7,3,reyBlanco);
-    initButtons(7,4,(new Queen(piece->TYPE_WHITE)));
+    initButtons(7,4,reyBlanco);
+    initButtons(7,3,(new Queen(piece->TYPE_WHITE)));
     initButtons(7,5,(new Alfil(piece->TYPE_WHITE)));
     initButtons(7,6,(new Horse(piece->TYPE_WHITE)));
     initButtons(7,7,(new Tower(piece->TYPE_WHITE)));
@@ -304,11 +304,12 @@ void MainWindow::playControl(Lockerc* bpushed)
         }
     }
 }
-
+//habilita movimientos y se resalta los casilleros donde se podra mover
 void MainWindow::habilitarMov(Lockerc*pushed){
     std::vector<std::vector<int>>a=pushed->getPiece()->posible();
     uint16_t x,y;
     King * rey;
+    //contador cuando no exista movimientos
     contJakeMate=0;
     for(unsigned i=0;i<a.size();++i){
         if(pushed->getPiece()->movLargo()==false){
@@ -387,12 +388,32 @@ void MainWindow::habilitarMov(Lockerc*pushed){
             }
         }
     }
-    //std::cout<<contJakeMate<<"  ajedreezz"<<std::endl;
+
+    //existira jake mate cuando el rey no tenga donde moverse
     if(contJakeMate>=8){
-        std::cout<<"JAKE MATEE"<<std::endl;
+        //std::cout<<"JAKE MATEE"<<std::endl;
+        MovementPiece* movement1;
+        movement1=new MovementPiece(
+                    *(pushed->getPosition()),
+                    *(pushed->getPosition()),
+                    pushed->getPiece(),
+                    movement1->MOVEMENT_JAKE_MATE
+                    );
+        jakeMate(pushed,movement1);
+
+        if(pushed->getPiece()->getType()==2){
+            notificationManagerSpecial->showNotification(notificationManager->NOTIFICATION_JAKE_MATE_BLACK);
+         movement1->plusMovement(movement1->MOVEMENT_JAKE_MATE);
+         endGame();
+        }else if(pushed->getPiece()->getType()==1){
+            notificationManagerSpecial->showNotification(notificationManager->NOTIFICATION_JAKE_MATE_WHITE);
+         movement1->plusMovement(movement1->MOVEMENT_JAKE_MATE);
+         endGame();
+        }
     }
 }
 
+//deshabilita todo los casilleros y los despinta
 void MainWindow::deshabilitarMov(){
     for(int i=0;i<8;++i){
         for(int j=0;j<8;++j){
@@ -405,6 +426,7 @@ void MainWindow::deshabilitarMov(){
     }
 }
 
+//se evalua el jakemate si es en rey negra o blanca
 void MainWindow:: jakeMate(Lockerc*bpushed,MovementPiece* movement1){
 
     if(bpushed->getPiece()->getType()==2){
@@ -418,6 +440,7 @@ void MainWindow:: jakeMate(Lockerc*bpushed,MovementPiece* movement1){
     }
 }
 
+//verifica el jake en el rey negro o blanco
 void MainWindow:: jake(Lockerc*bpushed,MovementPiece*mov){
     if(bpushed->getPiece()->getType()==2){
         if(searchJake(reyBlanco)){
@@ -432,6 +455,7 @@ void MainWindow:: jake(Lockerc*bpushed,MovementPiece*mov){
     }
 }
 
+//busca todo los jakes
 bool MainWindow:: searchJake(Piece *king){
     uint16_t x,y;
     uint16_t xKing=king->getPosition()->getPosX();
