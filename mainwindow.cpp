@@ -119,7 +119,7 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
     MenuGame * menugame=new MenuGame(this,a,movementManager);
     ui->menu->setIcon(QIcon(":/images/iconos/menuicon.png"));
     QObject::connect(ui->menu,SIGNAL(clicked()),menugame,SLOT(show()));
-
+    /*
     MovementPiece*movement=nullptr;
              movement=new MovementPiece(
                 *(reyBlanco->getPosition()),
@@ -182,7 +182,7 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
     movementManager->addMovement(movement5);
     movementManager->addMovement(movement6);
     movementManager->addMovement(movement7);
-
+*/
     std::cout<<reyBlanco->getPosition()->getPosX()<<std::endl;
 
     white=new Player(piece->TYPE_WHITE);//inicia al jugador con clave 1 es decir jugador de ficha blanca
@@ -287,6 +287,7 @@ void MainWindow::playControl(Lockerc* bpushed)
                 if(bpushed->getHabilitado()==true){
                     //std::cout<<"ELIMINAR"<<std::endl;
                     deshabilitarMov(pushed);
+
                     pushed->getPiece()->firstMove=false;
                     killedViewManager->addPieceKilled(bpushed->getPiece());
                     bpushed->setPiece(nullptr);
@@ -308,6 +309,35 @@ void MainWindow::playControl(Lockerc* bpushed)
                     // std::cout<<"REYY BLANCOOOO"<<reyBlanco->getPosition()->getPosX()<<std::endl;
                     //std::cout<<"REYY NEGROOOOO"<<reyNegro->getPosition()->getPosX()<<std::endl;
 
+                    /*           if(bpushed->getPiece()->getType()==2){
+                        if(searchJake(reyBlanco)){
+                            std::cout<<"JAKE BLANCOOO "<<std::endl;
+                            notificationManager->showNotification(notificationManager->NOTIFICATION_JAKE_WHITE);
+                            MovementPiece* movement2=new MovementPiece(
+                                        *(pushed->getPiece()->getPosition()),
+                                        *(bpushed->getPiece()->getPosition()),
+                                        pushed->getPiece(),
+                                         movement2->MOVEMENT_CAPTURE,
+                                        movement2->MOVEMENT_JAKE_MATE
+                              );
+
+                        }else{
+                            MovementPiece* movement1=new MovementPiece(
+                                        *(pushed->getPiece()->getPosition()),
+                                        *(bpushed->getPiece()->getPosition()),
+                                        pushed->getPiece(),
+                                        movement1->MOVEMENT_CAPTURE
+                                        );
+                            movementManager->addMovement(movement1);
+                        }
+                    }else if(bpushed->getPiece()->getType()==1){
+                        if(searchJake(reyNegro)){
+                            std::cout<<"JAKE NEGROOOOO"<<std::endl;
+
+                            notificationManager->showNotification(notificationManager->NOTIFICATION_JAKE_BLACK);
+                        }
+                    }*/
+
                     jake(bpushed);
 
 
@@ -320,11 +350,6 @@ void MainWindow::playControl(Lockerc* bpushed)
             //si es que está en jaque
             //si es que cumple con el tipo de movimiento de la pieza
             //si coronó como reina
-            //etc...
-
-            //por el momento solo estoy colocando el movimiento
-            //como si no hubiese reglas pero aqui tú las debes establecer
-            //para controlar el movimiento, agrega los métodos que creas conveniente
 
             if(bpushed->getHabilitado()==true){
 
@@ -333,19 +358,73 @@ void MainWindow::playControl(Lockerc* bpushed)
                 //al lugar de movimiento se le agrega la pieza que se quería mover
                 bpushed->setPiece(this->getPushed()->getPiece());
                 //repinta el casillero(Lockerc) para que se muestre la nueva pieza que lo debe ocupar
-
+                Lockerc  *aux= new Lockerc();
+                aux=pushed;
+                this->getPushed()->setPiece(nullptr);
                 bpushed->getPiece()->setPosition(bpushed->getPosition()->getPosX(),bpushed->getPosition()->getPosY());
                 bpushed->rePaint();
 
                 //se limpia el puntero del casillero presionada, ya que ya se ejecutó el movimiento y este ya no tiene pieza
 
-                this->getPushed()->setPiece(nullptr);
+                //    this->getPushed()->setPiece(nullptr);
                 //se repinta el casillero y como ya se movió no debería haber nada
                 this->pushed->rePaint();
                 pushed->removeStroke();//quita el resaltado de la anterior pieza
 
                 //al la tabla le indicamos que ya no hay ningun presionado, pues se ejecutó el movimiento
                 this->setPushed(nullptr);
+                /*
+                std::cout<<"pruebaaaa";
+                 std::cout<<aux->getPiece()->getPosition()->getPosX() <<" waszaaa"<<std::endl;
+                if(bpushed->getPiece()->getType()==2){
+                    if(searchJake(reyBlanco)){
+                        std::cout<<"JAKE BLANCOOO "<<std::endl;
+                        notificationManager->showNotification(notificationManager->NOTIFICATION_JAKE_WHITE);
+                        MovementPiece* movement2=new MovementPiece(
+                                    *(pushed->getPiece()->getPosition()),
+                                    *(bpushed->getPiece()->getPosition()),
+                                    pushed->getPiece(),
+                                     movement2->MOVEMENT_SINGLE,
+                                    movement2->MOVEMENT_JAKE
+                          );
+
+                        movementManager->addMovement(movement2);
+
+                    }else{
+                        MovementPiece* movement1=new MovementPiece(
+                                    *(pushed->getPiece()->getPosition()),
+                                    *(bpushed->getPiece()->getPosition()),
+                                    pushed->getPiece(),
+                                    movement1->MOVEMENT_SINGLE
+                                    );
+
+                        movementManager->addMovement(movement1);
+                    }
+                }else if(bpushed->getPiece()->getType()==1){
+                    if(searchJake(reyNegro)){
+                        std::cout<<"JAKE NEGROOOOO"<<std::endl;
+                        notificationManager->showNotification(notificationManager->NOTIFICATION_JAKE_BLACK);
+                        MovementPiece* movement2=new MovementPiece(
+                                    *(pushed->getPiece()->getPosition()),
+                                    *(bpushed->getPiece()->getPosition()),
+                                    pushed->getPiece(),
+                                    movement2->MOVEMENT_SINGLE,
+                                    movement2->MOVEMENT_JAKE_MATE
+                          );
+                        movementManager->addMovement(movement2);
+
+                    }else{
+                        MovementPiece* movement1=new MovementPiece(
+                                    *(pushed->getPiece()->getPosition()),
+                                    *(bpushed->getPiece()->getPosition()),
+                                    pushed->getPiece(),
+                                    movement1->MOVEMENT_SINGLE
+                                    );
+
+                            movementManager->addMovement(movement1);
+                    }
+                }*/
+
 
                 jake(bpushed);
 
@@ -404,16 +483,26 @@ void MainWindow::habilitarMov(Lockerc*pushed){
                             button->setHabilitado(true);
                         }*/
                     if(pushed->getPiece()->nombre=="pawn"){
-                        button->pintarCamino();
-                        button->setHabilitado(true);
-                                     //std::cout<<pushed->getPiece()->firstMove<<std::endl;
-                        if(i==0&&pushed->getPiece()->firstMove==false){
-                            std::cout<<"PEON UN MOVIMIENTO  "<<i<<std::endl;
+
+                        //std::cout<<pushed->getPiece()->firstMove<<std::endl;
+                        if(pushed->getPiece()->firstMove==false){
+                            if(i==0&&button->getPiece()==nullptr){
+                                std::cout<<"PEON UN MOVIMIENTO  "<<i<<std::endl;
+                                button->pintarCamino();
+                                button->setHabilitado(true);
+                                //break;
+                            }
+                            if(i==1||i==2&&button->getPiece()!=nullptr){
+                                button->pintarCamino();
+                                button->setHabilitado(true);
+                                std::cout<<"PEON INICIO   "<<i<<std::endl;
+                            }
+                        }else{
+
                             button->pintarCamino();
                             button->setHabilitado(true);
-                            break;
-                        }else{
                             std::cout<<"PEON INICIO   "<<i<<std::endl;
+
 
                         }
                     }else{
@@ -457,7 +546,17 @@ void MainWindow::habilitarMov(Lockerc*pushed){
 }
 
 void MainWindow::deshabilitarMov(Lockerc*pushed){
-    std::vector<std::vector<int>>a=pushed->getPiece()->posible();
+
+    for(int i=0;i<8;++i){
+        for(int j=0;j<8;++j){
+            QLayoutItem* item=ui->tablero->itemAtPosition(i,j);
+            QWidget* widget = item->widget();
+            Lockerc* button = dynamic_cast<Lockerc*>(widget);
+            button->despintarCamino();
+            button->setHabilitado(false);
+        }
+    }
+   /* std::vector<std::vector<int>>a=pushed->getPiece()->posible();
     int x,y;
     for(unsigned i=0;i<a.size();++i){
         if(pushed->getPiece()->movLargo()==false){
@@ -512,7 +611,7 @@ void MainWindow::deshabilitarMov(Lockerc*pushed){
                 }else{break;}
             }
         }
-    }
+    }*/
 }
 
 void MainWindow:: jake(Lockerc*bpushed){
