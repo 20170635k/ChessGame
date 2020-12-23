@@ -43,7 +43,7 @@ public:
     Chronometer* chronoblack;
     Player* white;
     Player* black;
-
+    bool enJuego{false};
 private:
     Ui::MainWindow *ui;
     //posición presionada

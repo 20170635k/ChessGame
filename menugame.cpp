@@ -59,4 +59,5 @@ void MenuGame:: startGameSlot(){
     mainwindow->setPlayerTurn(mainwindow->white);
     mainwindow->notificationManager->showNotification(mainwindow->notificationManager->NOTIFICATION_START_GAME);
     mainwindow->chronowhite->resume();
+    mainwindow->enJuego=true;
 }

@@ -17,7 +17,11 @@ Piece* Lockerc::getPiece(){return this->piece;}
 void Lockerc::setMainWindow(MainWindow *mw){contenedor=mw;}
 
 void Lockerc::handleButton(){
-    contenedor->playControl(this);}//cuanodo se preciona el boton(casillero) se llama al controlador del juego
+    if(contenedor->enJuego){
+        contenedor->playControl(this);
+    }
+
+}//cuanodo se preciona el boton(casillero) se llama al controlador del juego
 
 void Lockerc::pintarCamino(){
     QPalette pal = this->palette();
