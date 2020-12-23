@@ -8,12 +8,15 @@
 #include <QPushButton>
 #include <QApplication>
 #include "fileuimanagersave.h"
+#include "mainwindow.h"
+
 class MenuGame : public QDialog
 {
     Q_OBJECT
 public:
-    explicit MenuGame(QApplication &a,FileUIManagerSave* saveManager,QWidget *parent=0);
+    MenuGame(MainWindow* mainwindow, QApplication &a,FileUIManagerSave* saveManager,QWidget *parent=0);
     virtual ~MenuGame() {}
+
 private:
     QVBoxLayout *layoutContainer;
     QPushButton *startGame;
@@ -22,6 +25,9 @@ private:
     QLabel *imageLogo;
     QLabel * imageFondo;
     FileUIManagerSave* formSaveGame;//--nuevo
+    MainWindow *mainwindow;
+public slots:
+    void startGameSlot();
 };
 
 #endif // MENUGAME_H

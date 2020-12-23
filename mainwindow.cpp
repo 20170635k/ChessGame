@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QCoreApplication>
-#include "menugame.h"
+
 #include "pieceHorse.h"
 #include "pieceTower.h"
 #include "pieceAlfil.h"
@@ -10,6 +10,7 @@
 #include "piecePawn.h"
 #include <QScreen>
 #include <QTableWidgetItem>
+#include "menugame.h"
 MainWindow::MainWindow(QApplication &a, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -18,6 +19,7 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
     //center window
     move(QGuiApplication::screens().at(0)->geometry().center() - frameGeometry().center());
     setWindowTitle(QString("Chess Game TO"));
+    this->setFixedSize(952,680);
     /*QPalette pal = ui->p11->palette();
     pal.setColor(QPalette::Button, QColor(Qt::blue));
     ui->p11->setAutoFillBackground(true);
@@ -34,7 +36,7 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
     //1: para el blanco
     //2: para el negro
 
-    this->setFixedSize(952,680);
+
     Piece *piece=nullptr;
 
     initButtons(0,0,new Tower(piece->TYPE_BLACK));
@@ -111,18 +113,17 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
     initButtons(5,5,nullptr);
     initButtons(5,6,nullptr);
     initButtons(5,7,nullptr);
-    std::cout<<"prueba :'v";
 
 
     movementManager=new FileUIManagerSave(ui->Log);
-    MenuGame* m=new MenuGame(a,movementManager);
-    m->show();
-
-
+    MenuGame * menugame=new MenuGame(this,a,movementManager);
+    menugame->show();
+    ui->menu->setIcon(QIcon(":/images/iconos/menuicon.png"));
+    QObject::connect(ui->menu,SIGNAL(clicked()),menugame,SLOT(show()));
      MovementPiece*movement=nullptr;
              movement=new MovementPiece(
-                *(reyNegro->getPosition()),
                 *(reyBlanco->getPosition()),
+                *(reyNegro->getPosition()),
                 reyBlanco,
                 movement->MOVEMENT_JAKE_MATE
                 );
@@ -135,7 +136,7 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
    MovementPiece* movement2=new MovementPiece(
                 *(reyNegro->getPosition()),
                 *(reyBlanco->getPosition()),
-                reyBlanco,
+                reyNegro,
                 movement->MOVEMENT_SINGLE
                 );
     MovementPiece* movement3=new MovementPiece(
@@ -145,8 +146,8 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
                 movement->MOVEMENT_JAKE
                 );
    MovementPiece* movement4=new MovementPiece(
-                *(reyNegro->getPosition()),
                 *(reyBlanco->getPosition()),
+                *(reyNegro->getPosition()),
                 reyBlanco,
                 movement->MOVEMENT_SHORT_CASTLING
                 );
@@ -184,9 +185,8 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
 
     std::cout<<reyBlanco->getPosition()->getPosX()<<std::endl;
 
-    white=new Player(1);//inicia al jugador con clave 1 es decir jugador de ficha blanca
-    black=new Player(2);//inicia al jugador con clave 2 jugador con ficha negra
-    this->setPlayerTurn(white);
+    white=new Player(piece->TYPE_WHITE);//inicia al jugador con clave 1 es decir jugador de ficha blanca
+    black=new Player(piece->TYPE_BLACK);//inicia al jugador con clave 2 jugador con ficha negra
 
 
 
@@ -195,9 +195,13 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
     killedViewManager=new ManagerViewPieceKilled(qhw,qhb);
 
     notificationManager=new NotificationManager();
+    notificationManagerSpecial=new NotificationManager();
 
-    notificationManager->showNotification(notificationManager->NOTIFICATION_START_GAME);
+
+
     ui->Notification->addWidget(notificationManager);
+    ui->Notification->addWidget(notificationManagerSpecial);
+    //notificationManagerSpecial->showNotification(notificationManagerSpecial->NOTIFICATION_JAKE_MATE_BLACK);
     chronowhite= new Chronometer();
     chronoblack= new Chronometer();
     ui->chronoblack_3->addWidget(chronoblack);

@@ -10,6 +10,7 @@
 #include <QHBoxLayout>
 #include "managerviewpiecekilled.h"
 #include "chronometer.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -37,18 +38,22 @@ public:
 
     Piece* reyNegro;
     Piece * reyBlanco;
+    NotificationManager* notificationManager;
+    Chronometer* chronowhite;
+    Chronometer* chronoblack;
+    Player* white;
+    Player* black;
+
 private:
     Ui::MainWindow *ui;
     //posición presionada
     Lockerc *pushed{nullptr};
     std::vector<Lockerc*> casilleros;
-    Player* white;
-    Player* black;
     Player* playerturn{nullptr};
-    NotificationManager* notificationManager;
+
+    NotificationManager* notificationManagerSpecial;
     ManagerViewPieceKilled *killedViewManager;
-    Chronometer* chronowhite;
-    Chronometer* chronoblack;
+
     FileUIManagerSave * movementManager;
 
 };

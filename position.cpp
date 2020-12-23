@@ -20,14 +20,14 @@ void Position::setPosX(uint16_t pos_x){
 unsigned char Position::parseToChar(uint16_t pos_x){
     unsigned char retorno=' ';
     switch (pos_x) {
-        case 1:retorno='a';break;
-        case 2:retorno='b';break;
-        case 3:retorno='c';break;
-        case 4:retorno='d';break;
-        case 5:retorno='e';break;
-        case 6:retorno='f';break;
-        case 7:retorno='g';break;
-        case 8:retorno='h';break;
+        case 0:retorno='a';break;
+        case 1:retorno='b';break;
+        case 2:retorno='c';break;
+        case 3:retorno='d';break;
+        case 4:retorno='e';break;
+        case 5:retorno='f';break;
+        case 6:retorno='g';break;
+        case 7:retorno='h';break;
     }
     return retorno;
 }
