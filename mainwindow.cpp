@@ -36,13 +36,89 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
     //1: para el blanco
     //2: para el negro
 
+    startPieces();
 
+    movementManager=new FileUIManagerSave(ui->Log);
+    MenuGame * menugame=new MenuGame(this,a,movementManager);
+    ui->menu->setIcon(QIcon(":/images/iconos/menuicon.png"));
+    QObject::connect(ui->menu,SIGNAL(clicked()),menugame,SLOT(show()));
+
+    QGridLayout* qhb = ui->viewpiecekilledblack;
+    QGridLayout* qhw = ui->viewpiecekilledwhite;
+    killedViewManager=new ManagerViewPieceKilled(qhw,qhb);
+
+    notificationManager=new NotificationManager();
+    notificationManagerSpecial=new NotificationManager();
+
+    ui->Notification->addWidget(notificationManager);
+    ui->Notification->addWidget(notificationManagerSpecial);
+    //notificationManagerSpecial->showNotification(notificationManagerSpecial->NOTIFICATION_JAKE_MATE_BLACK);
+    chronowhite= new Chronometer();
+    chronoblack= new Chronometer();
+    ui->chronoblack_3->addWidget(chronoblack);
+    ui->chronowhite->addWidget(chronowhite);
+
+}
+
+//-----------------------inicia los botones y los coloca en el tablero
+void MainWindow::initButtons(int16_t x,int16_t y,Piece* newpiece)
+{
+    Lockerc *botonnuevo= new Lockerc(this);//Iniciamos el objeto Casillero(Lockerc)
+    botonnuevo->setMainWindow(this);//le pasamos un vínculo con la vista principal
+    if(newpiece!=nullptr){//si existe una pieza a agregar a este casillero creado entonces la agrega
+        std::string ruta=":/images/iconos/"+newpiece->getImagen();
+        botonnuevo->setIcon(QIcon(ruta.c_str()));//colocamos el ícono de la pieza
+        botonnuevo->setPiece(newpiece);//agregamos el puntero pieza al casillero
+        newpiece->setPosition(x,y);
+    }
+    botonnuevo->setPosition(x,y);
+
+    connect(botonnuevo, SIGNAL (clicked()),botonnuevo, SLOT (handleButton()));/*add event on push*/
+    casilleros.push_back(botonnuevo);//agregamos el boton al vector de puntero boton para tener siempre la referencia a estos
+    botonnuevo->setMaximumWidth(65);//agregamos las dimensiones del boton
+    botonnuevo->setMaximumHeight(65);//
+    botonnuevo->setMinimumWidth(65);
+    botonnuevo->setMinimumHeight(65);
+    botonnuevo->setIconSize(QSize(65,65));//agrega el tamaño al icono de este boton
+    ui->tablero->addWidget(botonnuevo,x,y);//agrega el boton al tablero
+}
+
+//cambiar el turno de los jugadores
+void MainWindow::changeTurn(){
+    if(playerturn==white){
+        this->playerturn=black;
+        chronowhite->pause();
+        chronoblack->resume();
+        notificationManager->showNotification(notificationManager->NOTIFICATION_BLACK_TIME);
+    }else{
+        this->playerturn=white;
+        chronoblack->pause();
+        chronowhite->resume();
+        notificationManager->showNotification(notificationManager->NOTIFICATION_WHITE_TIME);
+    }
+}
+void MainWindow:: endGame(){
+    chronoblack->stop();
+    chronowhite->stop();
+    enJuego=false;
+}
+void MainWindow:: startNewGame(){
+    setPlayerTurn(white);
+    chronoblack->start();
+    chronoblack->pause();
+    chronowhite->start();
+    movementManager->tableWidget->clear();
+    killedViewManager->clearManager();
+    movementManager->movements.clear();
+    enJuego=true;
+}
+void MainWindow::startPieces(){
     Piece *piece=nullptr;
 
     initButtons(0,0,new Tower(piece->TYPE_BLACK));
     initButtons(0,1,new Horse(piece->TYPE_BLACK));
     initButtons(0,2,new Alfil(piece->TYPE_BLACK));
-    reyNegro=new King(2);
+    reyNegro=new King(piece->TYPE_BLACK);
     initButtons(0,3,reyNegro);
     initButtons(0,4,new Queen(piece->TYPE_BLACK));
     initButtons(0,5,new Alfil(piece->TYPE_BLACK));
@@ -61,7 +137,7 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
     initButtons(7,0,(new Tower(piece->TYPE_WHITE)));
     initButtons(7,1,(new Horse(piece->TYPE_WHITE)));
     initButtons(7,2,(new Alfil(piece->TYPE_WHITE)));
-    reyBlanco=new King(1);
+    reyBlanco=new King(piece->TYPE_WHITE);
     initButtons(7,3,reyBlanco);
     initButtons(7,4,(new Queen(piece->TYPE_WHITE)));
     initButtons(7,5,(new Alfil(piece->TYPE_WHITE)));
@@ -113,115 +189,11 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
     initButtons(5,6,nullptr);
     initButtons(5,7,nullptr);
 
-    movementManager=new FileUIManagerSave(ui->Log);
-    MenuGame * menugame=new MenuGame(this,a,movementManager);
-    ui->menu->setIcon(QIcon(":/images/iconos/menuicon.png"));
-    QObject::connect(ui->menu,SIGNAL(clicked()),menugame,SLOT(show()));
-    /*
-    MovementPiece* movement1=new MovementPiece(
-                *(reyNegro->getPosition()),
-                *(reyBlanco->getPosition()),
-                reyNegro,
-                movement1->MOVEMENT_CAPTURE
-                );
-   MovementPiece* movement2=new MovementPiece(
-                *(reyNegro->getPosition()),
-                *(reyBlanco->getPosition()),
-                reyNegro,
-                movement1->MOVEMENT_SINGLE
-                );
-
-   MovementPiece* movement4=new MovementPiece(
-                *(reyBlanco->getPosition()),
-                *(reyNegro->getPosition()),
-                reyBlanco,
-                movement1->MOVEMENT_SHORT_CASTLING
-                );
-   MovementPiece* movement5=new MovementPiece(
-               *(reyNegro->getPosition()),
-               *(reyBlanco->getPosition()),
-               reyNegro,
-               movement1->MOVEMENT_LARGE_CASTLING
-               );
-   MovementPiece* movement6=new MovementPiece(
-               *(reyNegro->getPosition()),
-               *(reyBlanco->getPosition()),
-               reyNegro,
-               movement1->MOVEMENT_LARGE_CASTLING
-               );
-   MovementPiece* movement7=new MovementPiece(
-               *(reyNegro->getPosition()),
-               *(reyBlanco->getPosition()),
-               reyNegro,
-               movement1->MOVEMENT_LARGE_CASTLING
-               );
-    movement1->plusMovement(movement1->MOVEMENT_JAKE);
-    movement2->plusMovement(movement1->MOVEMENT_JAKE_MATE);
-    movementManager->addMovement(movement1);
-    movementManager->addMovement(movement2);
-    movementManager->addMovement(movement4);
-    movementManager->addMovement(movement5);
-    movementManager->addMovement(movement6);
-    movementManager->addMovement(movement7);
-*/
-    std::cout<<reyBlanco->getPosition()->getPosX()<<std::endl;
-
     white=new Player(piece->TYPE_WHITE);//inicia al jugador con clave 1 es decir jugador de ficha blanca
     black=new Player(piece->TYPE_BLACK);//inicia al jugador con clave 2 jugador con ficha negra
 
-    QGridLayout* qhb = ui->viewpiecekilledblack;
-    QGridLayout* qhw = ui->viewpiecekilledwhite;
-    killedViewManager=new ManagerViewPieceKilled(qhw,qhb);
-
-    notificationManager=new NotificationManager();
-    notificationManagerSpecial=new NotificationManager();
-
-    ui->Notification->addWidget(notificationManager);
-    ui->Notification->addWidget(notificationManagerSpecial);
-    //notificationManagerSpecial->showNotification(notificationManagerSpecial->NOTIFICATION_JAKE_MATE_BLACK);
-    chronowhite= new Chronometer();
-    chronoblack= new Chronometer();
-    ui->chronoblack_3->addWidget(chronoblack);
-    ui->chronowhite->addWidget(chronowhite);
 }
 
-//-----------------------inicia los botones y los coloca en el tablero
-void MainWindow::initButtons(int16_t x,int16_t y,Piece* newpiece)
-{
-    Lockerc *botonnuevo= new Lockerc(this);//Iniciamos el objeto Casillero(Lockerc)
-    botonnuevo->setMainWindow(this);//le pasamos un vínculo con la vista principal
-    if(newpiece!=nullptr){//si existe una pieza a agregar a este casillero creado entonces la agrega
-        std::string ruta=":/images/iconos/"+newpiece->getImagen();
-        botonnuevo->setIcon(QIcon(ruta.c_str()));//colocamos el ícono de la pieza
-        botonnuevo->setPiece(newpiece);//agregamos el puntero pieza al casillero
-        newpiece->setPosition(x,y);
-    }
-    botonnuevo->setPosition(x,y);
-
-    connect(botonnuevo, SIGNAL (clicked()),botonnuevo, SLOT (handleButton()));/*add event on push*/
-    casilleros.push_back(botonnuevo);//agregamos el boton al vector de puntero boton para tener siempre la referencia a estos
-    botonnuevo->setMaximumWidth(65);//agregamos las dimensiones del boton
-    botonnuevo->setMaximumHeight(65);//
-    botonnuevo->setMinimumWidth(65);
-    botonnuevo->setMinimumHeight(65);
-    botonnuevo->setIconSize(QSize(65,65));//agrega el tamaño al icono de este boton
-    ui->tablero->addWidget(botonnuevo,x,y);//agrega el boton al tablero
-}
-
-//cambiar el turno de los jugadores
-void MainWindow::changeTurn(){
-    if(playerturn==white){
-        this->playerturn=black;
-        chronowhite->pause();
-        chronoblack->resume();
-        //notificationManager->showNotification(notificationManager->NOTIFICATION_BLACK_TIME);
-    }else{
-        this->playerturn=white;
-        chronoblack->pause();
-        chronowhite->resume();
-        //notificationManager->showNotification(notificationManager->NOTIFICATION_WHITE_TIME);
-    }
-}
 Player* MainWindow::getPlayerTurn(){return playerturn;}
 void MainWindow::setPlayerTurn(Player* turnplayer){playerturn=turnplayer;}
 void MainWindow::setPushed(Lockerc * p){pushed=p;}//incresa un puntero del boton precionad
@@ -352,7 +324,6 @@ void MainWindow::habilitarMov(Lockerc*pushed){
                 x=pushed->getPosition()->getPosX()-(a[i][0]);
                 y=pushed->getPosition()->getPosY()-(a[i][1]);
             }
-
             if(0<=x&&x<=7&&0<=y&&y<=7){
                 QLayoutItem* item=ui->tablero->itemAtPosition(x,y);
                 QWidget* widget = item->widget();
@@ -416,11 +387,10 @@ void MainWindow::habilitarMov(Lockerc*pushed){
             }
         }
     }
-    std::cout<<contJakeMate<<"  ajedreezz"<<std::endl;
+    //std::cout<<contJakeMate<<"  ajedreezz"<<std::endl;
     if(contJakeMate>=8){
         std::cout<<"JAKE MATEE"<<std::endl;
     }
-
 }
 
 void MainWindow::deshabilitarMov(){
@@ -438,10 +408,10 @@ void MainWindow::deshabilitarMov(){
 void MainWindow:: jakeMate(Lockerc*bpushed,MovementPiece* movement1){
 
     if(bpushed->getPiece()->getType()==2){
-        notificationManager->showNotification(notificationManager->NOTIFICATION_JAKE_MATE_BLACK);
+        notificationManagerSpecial->showNotification(notificationManager->NOTIFICATION_JAKE_MATE_BLACK);
      movement1->plusMovement(movement1->MOVEMENT_JAKE_MATE);
     }else if(bpushed->getPiece()->getType()==1){
-        notificationManager->showNotification(notificationManager->NOTIFICATION_JAKE_MATE_WHITE);
+        notificationManagerSpecial->showNotification(notificationManager->NOTIFICATION_JAKE_MATE_WHITE);
      movement1->plusMovement(movement1->MOVEMENT_JAKE_MATE);
     }
 }
@@ -449,12 +419,12 @@ void MainWindow:: jakeMate(Lockerc*bpushed,MovementPiece* movement1){
 void MainWindow:: jake(Lockerc*bpushed,MovementPiece*mov){
     if(bpushed->getPiece()->getType()==2){
         if(searchJake(reyBlanco)){
-            notificationManager->showNotification(notificationManager->NOTIFICATION_JAKE_WHITE);
+            notificationManagerSpecial->showNotification(notificationManager->NOTIFICATION_JAKE_WHITE);
             mov->plusMovement(mov->MOVEMENT_JAKE);
         }
     }else if(bpushed->getPiece()->getType()==1){
         if(searchJake(reyNegro)){
-            notificationManager->showNotification(notificationManager->NOTIFICATION_JAKE_BLACK);
+            notificationManagerSpecial->showNotification(notificationManager->NOTIFICATION_JAKE_BLACK);
             mov->plusMovement(mov->MOVEMENT_JAKE);
         }
     }

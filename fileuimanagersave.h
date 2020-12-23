@@ -17,13 +17,14 @@ public:
     explicit FileUIManagerSave(QTableWidget* table,QWidget *parent=0);
     void addMovement(MovementPiece* movement);
     void vectorMovemetsToStream(std::vector<MovementPiece*> movements, QTextStream &stream);
+    std::vector<MovementPiece*> movements;
+    QTableWidget* tableWidget;
 private:
     FileMovementPieceManager *dataToSave;
     QPushButton * saveButton;
     QTextEdit * nameFile;
     QHBoxLayout * layoutContainer;
-    std::vector<MovementPiece*> movements;
-    QTableWidget* tableWidget;
+
 private slots:
     void saveGameData();
 

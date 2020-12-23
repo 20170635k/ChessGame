@@ -10,11 +10,13 @@ public:
     void addPieceKilled(Piece* killed);
 
 //    void removePieceKilled(Piece* )
+    void clearManager();
+
 private:
     QGridLayout *whiteBoxPieces;
     QGridLayout *blackBoxPieces;
-    std::vector<Piece*> whitePieces;
-    std::vector<Piece*> blackPieces;
+    std::vector<QPushButton*> whitePieces;
+    std::vector<QPushButton*> blackPieces;
     uint16_t sizewhite{0};
     uint16_t sizeblack{0};
 };

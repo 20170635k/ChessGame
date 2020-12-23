@@ -26,6 +26,7 @@ private:
     QLabel * imageFondo;
     FileUIManagerSave* formSaveGame;//--nuevo
     MainWindow *mainwindow;
+
 public slots:
     void startGameSlot();
 };

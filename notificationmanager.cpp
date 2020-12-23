@@ -7,9 +7,11 @@ NotificationManager::NotificationManager(QWidget *parent)
     setLayout(ly);//layout a his widget
     ly->addWidget(l = new QLabel(this));
     connect(&t, SIGNAL(timeout()), this, SLOT(updateTime()));
-    l->setFont(QFont("Agency FB",24));
+    l->setFont(QFont("Agency FB",20));
     l->setMaximumHeight(40);
     l->setMinimumHeight(40);
+    l->setMaximumWidth(300);
+    l->setMinimumWidth(300);
 
 }
 void NotificationManager:: showNotification(uint16_t type){

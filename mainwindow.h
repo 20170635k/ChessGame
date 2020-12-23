@@ -34,6 +34,11 @@ public:
     void habilitarMov(Lockerc*pushed);
     void deshabilitarMov();
     void removerPieza(Lockerc*pushed);
+
+
+    void endGame();
+    void startNewGame();
+
     void jake(Lockerc*pushed,MovementPiece*mov);
     bool searchJake(Piece*jake);
     void jakeMate(Lockerc*bpushed,MovementPiece* movement1);
@@ -46,7 +51,12 @@ public:
     Player* white;
     Player* black;
     bool enJuego{false};
+
     int contJakeMate;
+
+    FileUIManagerSave * movementManager;
+    void startPieces();
+
 private:
     Ui::MainWindow *ui;
     //posición presionada
@@ -57,7 +67,10 @@ private:
     NotificationManager* notificationManagerSpecial;
     ManagerViewPieceKilled *killedViewManager;
 
-    FileUIManagerSave * movementManager;
+
 
 };
+
+
+
 #endif // MAINWINDOW_H

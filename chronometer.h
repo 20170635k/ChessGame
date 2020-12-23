@@ -31,6 +31,8 @@ public slots:
     }
 
     void start() {
+        countTime=0;
+        shotTime=0;
         l->setText(QTime(0, 0).addMSecs(DURATION_TIME).toString());
         startTime.restart();
         t.start(1000);
