@@ -77,7 +77,6 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
     initButtons(6,6,(new Pawn(piece->TYPE_WHITE)));
     initButtons(6,7,(new Pawn(piece->TYPE_WHITE)));
 
-
     initButtons(2,0,nullptr);
     initButtons(2,1,nullptr);
     initButtons(2,2,nullptr);
@@ -156,8 +155,6 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
                reyNegro,
                movement1->MOVEMENT_LARGE_CASTLING
                );
-
-
     movement1->plusMovement(movement1->MOVEMENT_JAKE);
     movement2->plusMovement(movement1->MOVEMENT_JAKE_MATE);
     movementManager->addMovement(movement1);
@@ -186,7 +183,6 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
     chronoblack= new Chronometer();
     ui->chronoblack_3->addWidget(chronoblack);
     ui->chronowhite->addWidget(chronowhite);
-
 }
 
 //-----------------------inicia los botones y los coloca en el tablero
@@ -256,12 +252,25 @@ void MainWindow::playControl(Lockerc* bpushed)
                     deshabilitarMov();
                     pushed->getPiece()->firstMove=false;
                     killedViewManager->addPieceKilled(bpushed->getPiece());
-                    MovementPiece* movement1=new MovementPiece(
-                                *(pushed->getPiece()->getPosition()),
-                                *(bpushed->getPiece()->getPosition()),
-                                pushed->getPiece(),
-                                movement1->MOVEMENT_CAPTURE
-                                );
+                    MovementPiece* movement1;
+                    if(bpushed->getPiece()->nombre=="king"){
+                        movement1=new MovementPiece(
+                                    *(pushed->getPiece()->getPosition()),
+                                    *(bpushed->getPiece()->getPosition()),
+                                    pushed->getPiece(),
+                                    movement1->MOVEMENT_JAKE_MATE
+                                    );
+                        jakeMate(bpushed,movement1);
+
+                    }else{
+                        //MovementPiece* movement1;
+                        movement1=new MovementPiece(
+                                    *(pushed->getPiece()->getPosition()),
+                                    *(bpushed->getPiece()->getPosition()),
+                                    pushed->getPiece(),
+                                    movement1->MOVEMENT_CAPTURE
+                                    );
+                    }
                     bpushed->setPiece(nullptr);
                     //al lugar de movimiento se le agrega la pieza que se quería mover
                     bpushed->setPiece(this->getPushed()->getPiece());
@@ -343,25 +352,38 @@ void MainWindow::habilitarMov(Lockerc*pushed){
                 x=pushed->getPosition()->getPosX()-(a[i][0]);
                 y=pushed->getPosition()->getPosY()-(a[i][1]);
             }
+
+
             if(0<=x&&x<=7&&0<=y&&y<=7){
                 QLayoutItem* item=ui->tablero->itemAtPosition(x,y);
                 QWidget* widget = item->widget();
                 Lockerc* button = dynamic_cast<Lockerc*>(widget);
 
-                if(button->getPiece()==nullptr||button->getPiece()->getType()!=pushed->getPiece()->getType()){
+                if(button->getPiece()==nullptr||button->getPiece()->getType()!=pushed->getPiece()->getType())
+                {
                     /*  if(pushed->getPiece()->nombre=="king"){
                         rey->setPosition(x,y);
                         if(!jake(rey)){
                             button->pintarCamino();
                             button->setHabilitado(true);
                         }*/
-                    if(pushed->getPiece()->nombre=="pawn"){
-                        if(pushed->getPiece()->firstMove==false){
-                            if(i==0&&button->getPiece()==nullptr){
-                                button->pintarCamino();
-                                button->setHabilitado(true);
-                            }
-                            if((i==1||i==2)&&button->getPiece()!=nullptr){
+                    if(pushed->getPiece()->nombre=="king"){
+                        rey->setPosition(x,y);
+                        if(!searchJake(rey)){
+                            button->pintarCamino();
+                            button->setHabilitado(true);
+                        }
+                    }else{if(pushed->getPiece()->nombre=="pawn"){
+                            if(pushed->getPiece()->firstMove==false){
+                                if(i==0&&button->getPiece()==nullptr){
+                                    button->pintarCamino();
+                                    button->setHabilitado(true);
+                                }
+                                if((i==1||i==2)&&button->getPiece()!=nullptr){
+                                    button->pintarCamino();
+                                    button->setHabilitado(true);
+                                }
+                            }else{
                                 button->pintarCamino();
                                 button->setHabilitado(true);
                             }
@@ -369,9 +391,6 @@ void MainWindow::habilitarMov(Lockerc*pushed){
                             button->pintarCamino();
                             button->setHabilitado(true);
                         }
-                    }else{
-                        button->pintarCamino();
-                        button->setHabilitado(true);
                     }
                 }
             }
@@ -415,6 +434,17 @@ void MainWindow::deshabilitarMov(){
             button->despintarCamino();
             button->setHabilitado(false);
         }
+    }
+}
+
+void MainWindow:: jakeMate(Lockerc*bpushed,MovementPiece* movement1){
+
+    if(bpushed->getPiece()->getType()==2){
+        notificationManager->showNotification(notificationManager->NOTIFICATION_JAKE_MATE_BLACK);
+     movement1->plusMovement(movement1->MOVEMENT_JAKE_MATE);
+    }else if(bpushed->getPiece()->getType()==1){
+        notificationManager->showNotification(notificationManager->NOTIFICATION_JAKE_MATE_WHITE);
+     movement1->plusMovement(movement1->MOVEMENT_JAKE_MATE);
     }
 }
 
@@ -477,17 +507,21 @@ bool MainWindow:: searchJake(Piece *king){
                                 std::cout<<"CABALLO DETECTADO "<<std::endl;
                                 casilleroRey->pintarJake();
                                 return true;
+                            }else{
+                                break;
                             }
-                        }else if(contPawn==1){
-                            if(button->getPiece()->getType()==2&&(0==i||i==1)){
-                                std::cout<<"PEON NEGRO DETECTADO "<<std::endl;
-                                casilleroRey->pintarJake();
-                                return true;
-                            }else if(button->getPiece()->getType()==1&&(2==i||i==3)){
-                                std::cout<<"PEON BLANCO DETECTADO "<<std::endl;
-                                casilleroRey->pintarJake();
-                                return true;
-                            }
+                        }else {
+                            if(contPawn==1){
+                                if(button->getPiece()->getType()==2&&(0==i||i==1)){
+                                    std::cout<<"PEON NEGRO DETECTADO "<<std::endl;
+                                    casilleroRey->pintarJake();
+                                    return true;
+                                }else if(button->getPiece()->getType()==1&&(2==i||i==3)){
+                                    std::cout<<"PEON BLANCO DETECTADO "<<std::endl;
+                                    casilleroRey->pintarJake();
+                                    return true;
+                                }
+                            }else{break;}
                         }
                     }
                 }

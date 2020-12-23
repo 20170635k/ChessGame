@@ -36,6 +36,7 @@ public:
     void removerPieza(Lockerc*pushed);
     void jake(Lockerc*pushed,MovementPiece*mov);
     bool searchJake(Piece*jake);
+    void jakeMate(Lockerc*bpushed,MovementPiece* movement1);
 
     Piece* reyNegro;
     Piece * reyBlanco;
