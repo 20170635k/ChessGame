@@ -24,6 +24,7 @@ public:
     void rePaint();
     void pintarCamino();
     void despintarCamino();
+    void pintarJake();
     void setStroke();
     void removeStroke();
     void setPosition(uint16_t x, uint16_t y);

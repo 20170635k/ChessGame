@@ -34,13 +34,21 @@ void Lockerc::pintarCamino(){
 }
 void Lockerc::despintarCamino(){
     QPalette pal = this->palette();
-    //pal.setColor(QPalette::Button, QColor(94,60,0));
+    pal.setColor(QPalette::Button, QColor(94,60,0));
     this->setStyleSheet("border-color:navy;");
     this->setAutoFillBackground(true);
     this->setPalette(pal);
     this->update();
 }
 
+void Lockerc::pintarJake(){
+    QPalette pal = this->palette();
+    pal.setColor(QPalette::Button, QColor(94,60,0));
+    this->setStyleSheet("background-color:red;");
+    this->setAutoFillBackground(true);
+    this->setPalette(pal);
+    this->update();
+}
 void Lockerc:: setStroke()//le da un borde azul al contorno del boton
 {
     QPalette pal = this->palette();

@@ -4,6 +4,7 @@ Horse::Horse(uint16_t type):
     Piece(PIECE_CODE_HORSE),type{type}
 {
     setImagen((type==this->TYPE_BLACK)?"horse-b.png":"horse-w.png");
+    this->nombre="horse";
 }
 bool Horse::move(unsigned char x, uint16_t y){
     return true;

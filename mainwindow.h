@@ -32,11 +32,15 @@ public:
     void changeTurn();
     void playControl(Lockerc* bpushed);
     void habilitarMov(Lockerc*pushed);
-    void deshabilitarMov(Lockerc*pushed);
+    void deshabilitarMov();
     void removerPieza(Lockerc*pushed);
-    bool jake(Piece*jake);
+
+
     void endGame();
     void startNewGame();
+
+    void jake(Lockerc*pushed,MovementPiece*mov);
+    bool searchJake(Piece*jake);
 
     Piece* reyNegro;
     Piece * reyBlanco;
