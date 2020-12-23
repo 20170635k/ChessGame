@@ -120,64 +120,50 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
     ui->menu->setIcon(QIcon(":/images/iconos/menuicon.png"));
     QObject::connect(ui->menu,SIGNAL(clicked()),menugame,SLOT(show()));
 
-    MovementPiece*movement=nullptr;
-             movement=new MovementPiece(
-                *(reyBlanco->getPosition()),
-                *(reyNegro->getPosition()),
-                reyBlanco,
-                movement->MOVEMENT_JAKE_MATE
-                );
+
     MovementPiece* movement1=new MovementPiece(
                 *(reyNegro->getPosition()),
                 *(reyBlanco->getPosition()),
                 reyNegro,
-                movement->MOVEMENT_CAPTURE
+                movement1->MOVEMENT_CAPTURE
                 );
    MovementPiece* movement2=new MovementPiece(
                 *(reyNegro->getPosition()),
                 *(reyBlanco->getPosition()),
                 reyNegro,
-                movement->MOVEMENT_SINGLE
+                movement1->MOVEMENT_SINGLE
                 );
-    MovementPiece* movement3=new MovementPiece(
-                *(reyNegro->getPosition()),
-                *(reyBlanco->getPosition()),
-                reyNegro,
-                movement->MOVEMENT_JAKE
-                );
+
    MovementPiece* movement4=new MovementPiece(
                 *(reyBlanco->getPosition()),
                 *(reyNegro->getPosition()),
                 reyBlanco,
-                movement->MOVEMENT_SHORT_CASTLING
+                movement1->MOVEMENT_SHORT_CASTLING
                 );
    MovementPiece* movement5=new MovementPiece(
                *(reyNegro->getPosition()),
                *(reyBlanco->getPosition()),
                reyNegro,
-               movement->MOVEMENT_LARGE_CASTLING
+               movement1->MOVEMENT_LARGE_CASTLING
                );
    MovementPiece* movement6=new MovementPiece(
                *(reyNegro->getPosition()),
                *(reyBlanco->getPosition()),
                reyNegro,
-               movement->MOVEMENT_LARGE_CASTLING,
-               movement->MOVEMENT_JAKE
+               movement1->MOVEMENT_LARGE_CASTLING
                );
    MovementPiece* movement7=new MovementPiece(
                *(reyNegro->getPosition()),
                *(reyBlanco->getPosition()),
                reyNegro,
-               movement->MOVEMENT_LARGE_CASTLING,
-               movement->MOVEMENT_JAKE_MATE
+               movement1->MOVEMENT_LARGE_CASTLING
                );
 
 
-
-    movementManager->addMovement(movement);
+    movement1->plusMovement(movement1->MOVEMENT_JAKE);
+    movement2->plusMovement(movement1->MOVEMENT_JAKE_MATE);
     movementManager->addMovement(movement1);
     movementManager->addMovement(movement2);
-    movementManager->addMovement(movement3);
     movementManager->addMovement(movement4);
     movementManager->addMovement(movement5);
     movementManager->addMovement(movement6);

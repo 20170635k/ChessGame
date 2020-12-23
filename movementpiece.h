@@ -11,9 +11,10 @@ namespace MP {
 class MovementPiece
 {
 public:
-    MovementPiece(Position from,Position to,Piece *pieza,std::string typeMove,std::string secondType=MOVEMENT_NOTHING);
+    MovementPiece(Position from,Position to,Piece *pieza,std::string typeMove);
     QString getMovement();
     Piece* getPieceMoved();
+    void plusMovement(std::string type);
     static std::string MOVEMENT_SINGLE;
     static std::string MOVEMENT_CAPTURE;
     static std::string MOVEMENT_JAKE;

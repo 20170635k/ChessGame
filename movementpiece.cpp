@@ -1,6 +1,6 @@
 #include "movementpiece.h"
 
-MovementPiece::MovementPiece(Position from,Position to,Piece *piece,std::string typeMove,std::string secondType)
+MovementPiece::MovementPiece(Position from,Position to,Piece *piece,std::string typeMove)
 {
     pieceMoved=piece;
 
@@ -29,14 +29,12 @@ MovementPiece::MovementPiece(Position from,Position to,Piece *piece,std::string 
         result=result+std::to_string( 8-to.getPosX());
         result+=MOVEMENT_JAKE_MATE;
     }
-    if(secondType.compare(MOVEMENT_NOTHING)!=0){
-        std::cout<<"está entrando\n";
-        result+=secondType;
-    }
-
 }
 QString MovementPiece::getMovement(){
     return QString(result.c_str());
+}
+void MovementPiece::plusMovement(std::string type){
+ result+=type;
 }
 Piece* MovementPiece::getPieceMoved(){return pieceMoved;}
 
