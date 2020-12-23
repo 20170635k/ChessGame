@@ -46,6 +46,7 @@ public:
     Player* white;
     Player* black;
     bool enJuego{false};
+    int contJakeMate;
 private:
     Ui::MainWindow *ui;
     //posición presionada

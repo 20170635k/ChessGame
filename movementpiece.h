@@ -22,6 +22,7 @@ public:
     static std::string MOVEMENT_LARGE_CASTLING;
     static std::string MOVEMENT_JAKE_MATE;
     static std::string MOVEMENT_NOTHING;
+
 private:
     std::string result{""};
     Piece* pieceMoved;
