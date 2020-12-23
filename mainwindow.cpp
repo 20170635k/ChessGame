@@ -212,6 +212,7 @@ void MainWindow::playControl(Lockerc* bpushed)
                 if(bpushed->getHabilitado()==true){
                     //std::cout<<"ELIMINAR"<<std::endl;
                     deshabilitarMov(pushed);
+                    pushed->getPiece()->firstMove=false;
                     killedViewManager->addPieceKilled(bpushed->getPiece());
                     bpushed->setPiece(nullptr);
                     //al lugar de movimiento se le agrega la pieza que se quería mover
@@ -231,6 +232,9 @@ void MainWindow::playControl(Lockerc* bpushed)
 
                     // std::cout<<"REYY BLANCOOOO"<<reyBlanco->getPosition()->getPosX()<<std::endl;
                     //std::cout<<"REYY NEGROOOOO"<<reyNegro->getPosition()->getPosX()<<std::endl;
+
+                    jake(bpushed);
+
 
                     this->changeTurn();//cambia el turno cuando ya se hizo la jugada
                 }
@@ -268,18 +272,7 @@ void MainWindow::playControl(Lockerc* bpushed)
                 //al la tabla le indicamos que ya no hay ningun presionado, pues se ejecutó el movimiento
                 this->setPushed(nullptr);
 
-                if(bpushed->getPiece()->getType()==2){
-                    if(jake(reyBlanco)){
-                        std::cout<<"JAKE BLANCOOO "<<std::endl;
-                        notificationManager->showNotification(notificationManager->NOTIFICATION_JAKE_WHITE);
-                    }
-                }else if(bpushed->getPiece()->getType()==1){
-                    if(jake(reyNegro)){
-                        std::cout<<"JAKE NEGROOOOO"<<std::endl;
-
-                        notificationManager->showNotification(notificationManager->NOTIFICATION_JAKE_BLACK);
-                    }
-                }
+                jake(bpushed);
 
                 //std::cout<<"REYY BLANCOOOO"<<reyBlanco->getPosition()->getPosX()<<std::endl;
                 //std::cout<<"REYY NEGROOOOO"<<reyNegro->getPosition()->getPosX()<<std::endl;
@@ -303,11 +296,11 @@ void MainWindow::playControl(Lockerc* bpushed)
     }
 }
 
-
 void MainWindow::habilitarMov(Lockerc*pushed){
     std::vector<std::vector<int>>a=pushed->getPiece()->posible();
-    int x,y;
+    uint16_t x,y;
     King * rey;
+    // int jakeMate=0;
     for(unsigned i=0;i<a.size();++i){
         //std::cout<<pushed->getPiece()->getImagen().c_str()<<std::endl;
         if(pushed->getPiece()->movLargo()==false){
@@ -323,30 +316,36 @@ void MainWindow::habilitarMov(Lockerc*pushed){
                 x=pushed->getPosition()->getPosX()-(a[i][0]);
                 y=pushed->getPosition()->getPosY()-(a[i][1]);
             }
-
             if(0<=x&&x<=7&&0<=y&&y<=7){
                 QLayoutItem* item=ui->tablero->itemAtPosition(x,y);
                 QWidget* widget = item->widget();
                 Lockerc* button = dynamic_cast<Lockerc*>(widget);
 
-                if(button->getPiece()==nullptr){
-                   if(pushed->getPiece()->nombre=="king"){
+                if(button->getPiece()==nullptr||button->getPiece()->getType()!=pushed->getPiece()->getType()){
+                    /*  if(pushed->getPiece()->nombre=="king"){
                         rey->setPosition(x,y);
                         if(!jake(rey)){
                             button->pintarCamino();
                             button->setHabilitado(true);
+                        }*/
+                    if(pushed->getPiece()->nombre=="pawn"){
+                        button->pintarCamino();
+                        button->setHabilitado(true);
+                                     //std::cout<<pushed->getPiece()->firstMove<<std::endl;
+                        if(i==0&&pushed->getPiece()->firstMove==false){
+                            std::cout<<"PEON UN MOVIMIENTO  "<<i<<std::endl;
+                            button->pintarCamino();
+                            button->setHabilitado(true);
+                            break;
+                        }else{
+                            std::cout<<"PEON INICIO   "<<i<<std::endl;
+
                         }
-
                     }else{
+                        button->pintarCamino();
+                        button->setHabilitado(true);
+                    }
 
-                        button->pintarCamino();
-                        button->setHabilitado(true);
-                    }
-                }else{
-                    if(button->getPiece()->getType()!=pushed->getPiece()->getType()){
-                        button->pintarCamino();
-                        button->setHabilitado(true);
-                    }
                 }
             }
         }else{
@@ -379,6 +378,7 @@ void MainWindow::habilitarMov(Lockerc*pushed){
             }
         }
     }
+
 }
 
 void MainWindow::deshabilitarMov(Lockerc*pushed){
@@ -440,15 +440,33 @@ void MainWindow::deshabilitarMov(Lockerc*pushed){
     }
 }
 
-bool MainWindow:: jake(Piece *king){
-    int x,y;
-    std::vector<std::vector<int>>a=king->posible();
+void MainWindow:: jake(Lockerc*bpushed){
+    if(bpushed->getPiece()->getType()==2){
+        if(searchJake(reyBlanco)){
+            std::cout<<"JAKE BLANCOOO "<<std::endl;
+            notificationManager->showNotification(notificationManager->NOTIFICATION_JAKE_WHITE);
+        }
+    }else if(bpushed->getPiece()->getType()==1){
+        if(searchJake(reyNegro)){
+            std::cout<<"JAKE NEGROOOOO"<<std::endl;
+
+            notificationManager->showNotification(notificationManager->NOTIFICATION_JAKE_BLACK);
+        }
+    }
+}
+
+bool MainWindow:: searchJake(Piece *king){
+    unsigned x,y;
+    int contPawn,contHorse;
+    std::vector<std::vector<int>>a={{1,1},{-1,1},{1,-1},{-1,-1},{-1,0},{1,0},{0,-1},{0,1},{-1,-2},{1,-2},{-1,2},{1,2},{2,-1},{2,1},{-2,-1},{-2,1}};
     for(unsigned i=0;i<a.size();++i){
-        int cont=0;
+        contPawn=0;
+        contHorse=0;
         for(unsigned j=1;j<=7;++j){
             x=king->getPosition()->getPosX()+(a[i][0])*j;
             y=king->getPosition()->getPosY()+(a[i][1])*j;
-            cont++;
+            ++contPawn;
+            ++contHorse;
             if(0<=x&&x<=7&&0<=y&&y<=7){
 
                 //std::cout<<"CONTADOR ------->  "<<cont<<std::endl;
@@ -466,8 +484,11 @@ bool MainWindow:: jake(Piece *king){
                             }else if((button->getPiece()->nombre=="tower"||button->getPiece()->nombre=="queen")&&4<=i&&i<=7){
                                 std::cout<<"TORRE DETECTADO "<<std::endl;
                                 return true;
+                            }else if((button->getPiece()->nombre=="horse")&&8<=i&&i<=15&&contHorse==1){
+                                std::cout<<"CABALLO DETECTADO "<<std::endl;
+                                return true;
                             }
-                        }else if(cont==1){
+                        }else if(contPawn==1){
                             if(button->getPiece()->getType()==2&&(0==i||i==1)){
                                 std::cout<<"PEON NEGRO DETECTADO "<<std::endl;
                                 return true;
@@ -483,6 +504,9 @@ bool MainWindow:: jake(Piece *king){
     }
     return false;
 }
+
+
+
 
 
 

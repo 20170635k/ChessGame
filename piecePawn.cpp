@@ -23,6 +23,6 @@ std::vector<std::vector<int>> Pawn ::posible(){
         return {{1,0},{2,0}};
 
     }else
-        return {{1,0}};
+        return {{1,0},{1,-1},{1,1}};
 
 }

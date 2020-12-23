@@ -32,7 +32,8 @@ public:
     void habilitarMov(Lockerc*pushed);
     void deshabilitarMov(Lockerc*pushed);
     void removerPieza(Lockerc*pushed);
-    bool jake(Piece*jake);
+    void jake(Lockerc*pushed);
+    bool searchJake(Piece*jake);
 
     Piece* reyNegro;
     Piece * reyBlanco;
