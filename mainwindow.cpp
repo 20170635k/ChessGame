@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QCoreApplication>
-
 #include "pieceHorse.h"
 #include "pieceTower.h"
 #include "pieceAlfil.h"
@@ -196,8 +195,8 @@ void MainWindow::startPieces(){
 
 Player* MainWindow::getPlayerTurn(){return playerturn;}
 void MainWindow::setPlayerTurn(Player* turnplayer){playerturn=turnplayer;}
-void MainWindow::setPushed(Lockerc * p){pushed=p;}//incresa un puntero del boton precionad
-Lockerc* MainWindow::getPushed(){return pushed;}//retorna el puntero al boton precionado
+void MainWindow::setPushed(Lockerc * p){pushed=p;}//ingresa un puntero del boton precionado
+Lockerc* MainWindow::getPushed(){return pushed;}//retorna el puntero al boton presionado
 bool MainWindow:: isPushed(){return (pushed!=nullptr)?true:false;}//saber si hay algun boton precionado
 
 //-------------------------------------------------------------------------------------------
@@ -264,14 +263,13 @@ void MainWindow::playControl(Lockerc* bpushed)
                 }
             }
         }else{//movimiento simple
-            //aqui irían todo lo necesario para controlar el movimiento
 
             if(bpushed->getHabilitado()==true){
                 deshabilitarMov();
                 pushed->getPiece()->firstMove=false;
                 //al lugar de movimiento se le agrega la pieza que se quería mover
                 bpushed->setPiece(this->getPushed()->getPiece());
-                //repinta el casillero(Lockerc) para que se muestre la nueva pieza que lo debe ocupar
+
 
                 MovementPiece* movement2=new MovementPiece(
                             *(pushed->getPosition()),
@@ -281,6 +279,7 @@ void MainWindow::playControl(Lockerc* bpushed)
                             );
                 this->getPushed()->setPiece(nullptr);
                 bpushed->getPiece()->setPosition(bpushed->getPosition()->getPosX(),bpushed->getPosition()->getPosY());
+                //repinta el casillero(Lockerc) para que se muestre la nueva pieza que lo debe ocupar
                 bpushed->rePaint();
                 //se limpia el puntero del casillero presionada, ya que ya se ejecutó el movimiento y este ya no tiene pieza
                 //se repinta el casillero y como ya se movió no debería haber nada
@@ -309,9 +308,10 @@ void MainWindow::habilitarMov(Lockerc*pushed){
     std::vector<std::vector<int>>a=pushed->getPiece()->posible();
     uint16_t x,y;
     King * rey;
-    //contador cuando no exista movimientos
+    //contador cuando no exista movimientos para el rey: 8 indicaria jakemate
     contJakeMate=0;
     for(unsigned i=0;i<a.size();++i){
+        //esta condicion es para las piezas que tiene movimientos fijos
         if(pushed->getPiece()->movLargo()==false){
             if(pushed->getPiece()->getType()==2){
                 if(pushed->getPiece()->nombre=="king")
@@ -359,7 +359,7 @@ void MainWindow::habilitarMov(Lockerc*pushed){
                     }
                 }else{++contJakeMate;}
             }else{++contJakeMate;}
-        }else{
+        }else{ // para piezas de movimiento largo
             int ancla=0;
             for(int j=1;j<=7;j++){
                 int x=pushed->getPosition()->getPosX()+(a[i][0])*j;
@@ -400,7 +400,7 @@ void MainWindow::habilitarMov(Lockerc*pushed){
                     movement1->MOVEMENT_JAKE_MATE
                     );
         jakeMate(pushed,movement1);
-
+        //mostramos el mensaje de jake mate dependiendo del tipo
         if(pushed->getPiece()->getType()==2){
             notificationManagerSpecial->showNotification(notificationManager->NOTIFICATION_JAKE_MATE_BLACK);
          movement1->plusMovement(movement1->MOVEMENT_JAKE_MATE);
@@ -426,7 +426,7 @@ void MainWindow::deshabilitarMov(){
     }
 }
 
-//se evalua el jakemate si es en rey negra o blanca
+//verifica el jakemate si es en rey negro o blanco
 void MainWindow:: jakeMate(Lockerc*bpushed,MovementPiece* movement1){
 
     if(bpushed->getPiece()->getType()==2){
