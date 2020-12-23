@@ -117,10 +117,10 @@ MainWindow::MainWindow(QApplication &a, QWidget *parent)
 
     movementManager=new FileUIManagerSave(ui->Log);
     MenuGame * menugame=new MenuGame(this,a,movementManager);
-    menugame->show();
     ui->menu->setIcon(QIcon(":/images/iconos/menuicon.png"));
     QObject::connect(ui->menu,SIGNAL(clicked()),menugame,SLOT(show()));
-     MovementPiece*movement=nullptr;
+
+    MovementPiece*movement=nullptr;
              movement=new MovementPiece(
                 *(reyBlanco->getPosition()),
                 *(reyNegro->getPosition()),

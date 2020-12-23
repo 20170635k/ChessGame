@@ -4,6 +4,10 @@
 #include "piece.h"
 #include <QTextEdit>
 #include <iostream>
+namespace MP {
+    class MovementPiece;
+}
+
 class MovementPiece
 {
 public:
